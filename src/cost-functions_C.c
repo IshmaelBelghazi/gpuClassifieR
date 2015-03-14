@@ -8,11 +8,7 @@
 double _get_cross_entropy(const double * log_Y, const int * dim_log_Y,
                           const double * T, const int * dim_T) {
 
-  if (dim_T[0] != dim_log_Y[0]) error("dimensions mismatch 1"); // T is K X N.
-  int K = dim_T[0];
-  if (dim_T[1] != dim_log_Y[1]) error("dimensions mismatch 2"); // log_Y is K X N
-  int N = dim_T[1];
-
+  int N = dim_T[1],  K = dim_T[0];;
   int one = 1;
   double cost = 0;
 

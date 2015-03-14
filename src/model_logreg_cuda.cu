@@ -43,7 +43,7 @@ __global__ void setCondProbKern(double * __restrict__ Y,  // conditonal probabil
     int i = 0;
     while (i < K) {
       log_evidence += exp_activation[i];
-      i = i + 1;
+      ++i;
     }
     log_evidence = log(log_evidence);
   }
@@ -93,7 +93,7 @@ void _set_cost_logreg_cuda(cublasHandle_t handle,
   // II.a element wise multiplication of dev_log_Y and dev_T. Note that log_Y
   // is a log probability. Therefore each elements of the sum is positive. This allow using
   // cuBlas function to sum quickly.
-  // For now use N blocks of K threads:
+  // For now use N blocks of K threads. This is only temporary!
   vectorMult <<< N, K>>>(dev_log_Y, dev_T,
                          -1.0 / (K * N), K * N, dev_log_Y);
   // II.b sum all array elements
