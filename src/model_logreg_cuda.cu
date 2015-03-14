@@ -45,8 +45,6 @@ __global__ void setCondProbKern(double * __restrict__ Y,  // conditonal probabil
       log_evidence += exp_activation[i];
       i = i + 1;
     }
-    // taking log
-
     log_evidence = log(log_evidence);
   }
 

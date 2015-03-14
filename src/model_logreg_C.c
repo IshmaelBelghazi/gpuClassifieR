@@ -12,12 +12,8 @@ void _set_condprob_logreg(const double * restrict X, const int * restrict dim_X,
                           double * restrict Y, const int * restrict dim_Y,
                           const int normalize, const int log_domain) {
 
-  if (dim_X[0] != dim_Y[1]) error("dimensions mismatch");  // X is N X M
-  int N = dim_X[0];
-  if (dim_X[1] != dim_W[1]) error("dimensions mismatch"); // W is K X M
-  int M = dim_X[1];
-  if (dim_W[0] != dim_Y[0]) error("dimensions mismatch"); // Y is K X N
-  int K = dim_W[0];
+
+  int N = dim_X[0], dim_X[1], K = dim_W[0];
 
   // Computing activation
   char * trans_W = "N", * trans_X = "T";
@@ -77,14 +73,8 @@ void _set_grad_logreg(const double * restrict  X, const int * restrict dim_X,
                       const double * decay) {
 
 
-  if ( dim_X[1] != dim_grad[1]) error("dimensions mismatch"); // X is N X M
-  if (dim_grad[1] != dim_W[1]) error("dimensions mismatch"); // W is K X M
-  int M = dim_X[1];
-  if (dim_X[0] != dim_T[1]) error("dimensions mismatch");  // T is K X N
-  int N = dim_X[0];
-  if (dim_W[0] != dim_T[0]) error("dimensions mismatch");
-  if (dim_T[0] != dim_grad[0]) error("dimensions mismatch"); // Grad is K X M
-  int K = dim_W[0];
+
+  int N = dim_X[0], M = dim_X[1], K = dim_W[0];
 
   double * Y_ptr = Calloc(K * N, double);
   int dim_Y[2] = {K, N};

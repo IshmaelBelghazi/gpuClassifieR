@@ -26,6 +26,11 @@ train.default <- function(object, feats, targets, decay=NULL, step_size=NULL, ma
 train.model.spec <- function(object, feats, targets, decay=NULL, step_size=NULL, max_iter=NULL,
                              verbose=FALSE, tol=1e-6, backend="R", ...) {
 
+    ## Features should be N X M. Targets should be N X K
+    stopifnot(NROW(feats) == NROW(targets))
+    ## Weights should be M X K
+    stopifnot(NROW(object$weights) == NCOL(feats))
+    stopifnot(NCOL(object$weights) == NCOL(targets))
 
     if(is.null(step_size)) {
         message("unspecified step size. defaulting to 0.01")
@@ -110,8 +115,8 @@ train_gd_C <-  function(object, feats, targets, decay=NULL, step_size=NULL,
 
     weights <- coef(object)
     results <- .Call("train_gd_", as.matrix(feats),
-                     t(as.matrix(weights)),
-                     t(as.matrix(targets)),
+                     t(as.matrix(weights)),  ## Transpose to minimize cache
+                     t(as.matrix(targets)),  ## misuse during BLAS operations
                      as.double(decay),
                      as.double(step_size),
                      as.integer(max_iter),
