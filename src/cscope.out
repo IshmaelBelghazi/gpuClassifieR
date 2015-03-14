@@ -1,0 +1,2660 @@
+cscope 15 $HOME/Dropbox/Rlib/sag_test/cudaLogReg/src               0000013980
+	@cost-functions_C.c
+
+1 
+	~<R.h
+>
+
+2 
+	~<R_ext/BLAS.h
+>
+
+4 
+	~"cudaLogReg.h
+"
+
+5 
+	~"cudaLogReg-utžs.h
+"
+
+6 
+	~"co¡-funùiÚs_C.h
+"
+
+8 
+	$_g‘_üoss_’ŒÝy
+(cÚ¡ * 
+log_Y
+, cÚ¡ * 
+dim_log_Y
+,
+
+9 cÚ¡ * 
+T
+, cÚ¡ * 
+dim_T
+) {
+
+11 ià(
+dim_T
+[0] !ð
+dim_log_Y
+[0]è
+	`”rÜ
+("dimensions mismatch");
+
+12 
+K
+ = 
+dim_T
+[0];
+
+13 ià(
+dim_T
+[1] !ð
+dim_log_Y
+[1]è
+	`”rÜ
+("dimensions mismatch");
+
+14 
+N
+ = 
+dim_T
+[1];
+
+16 
+Úe
+ = 1;
+
+17 
+co¡
+ = 0;
+
+19 
+j
+ = 0; j < 
+N
+; j++) {
+
+23 
+co¡
+ -ð
+	`F77_CALL
+(
+ddÙ
+)(&
+K
+, &
+log_Y
+[
+j
+ * K], &
+Úe
+, &
+T
+[j * K], &one);
+
+25  (
+co¡
+ / (
+N
+ * 
+K
+));
+
+27 
+	}
+}
+
+	@cost-functions_C.h
+
+1 #iâdeà
+COSTFUNCTIONS
+
+
+2 
+	#COSTFUNCTIONS
+
+
+	)
+
+3 
+_g‘_üoss_’ŒÝy
+ (cÚ¡ * 
+log_Y
+, cÚ¡ * 
+dim_log_Y
+,
+
+4 cÚ¡ * 
+T
+, cÚ¡ * 
+dim_T
+);
+
+	@cudaLogReg-init.c
+
+1 
+	~<R.h
+>
+
+2 
+	~<Rdefšes.h
+>
+
+3 
+	~<Rš‹rçû.h
+>
+
+5 
+	~<R_ext/RdyÆßd.h
+>
+
+6 
+	~<R_ext/Visibž™y.h
+>
+
+8 
+	~"cudaLogReg.h
+"
+
+9 
+	~"’Œypošts-mod–_log»g_C.h
+"
+
+10 
+	~"’Œypošts-mod–_log»g_cuda.h
+"
+
+11 
+	~"’Œypošts-Œaš”_gd_C.h
+"
+
+15 
+	#CALLDEF
+(
+Çme
+, 
+n
+è{#Çme, (
+DL_FUNC
+) &name,‚}
+
+17 cÚ¡ 
+R_C®lM‘hodDef
+ 
+ÿÎM‘hods
+[] = {
+
+	)
+
+19 
+CALLDEF
+(
+g‘_cÚd´ob_log»g_
+, 4),
+
+20 
+CALLDEF
+(
+g‘_co¡_log»g_
+, 3),
+
+21 
+CALLDEF
+(
+g‘_g¿d_log»g_
+, 3),
+
+22 
+CALLDEF
+(
+Œaš_gd_
+, 7),
+
+24 
+CALLDEF
+(
+g‘_cÚd´ob_log»g_cuda
+, 4),
+
+25 
+CALLDEF
+(
+g‘_co¡_log»g_cuda
+, 3),
+
+26 
+CALLDEF
+(
+g‘_g¿d_log»g_cuda
+, 3),
+
+27 {
+	gNULL
+, NULL, 0}
+
+32 
+©Œibu‹_visibË
+ 
+	$R_š™_cudaLogReg
+(
+DÎInfo
+ * 
+šfo
+) {
+
+33 
+	`R_»gi¡”Routšes
+(
+šfo
+, 
+NULL
+, 
+ÿÎM‘hods
+, NULL, NULL);
+
+36 
+	}
+}
+
+	@cudaLogReg-utils.c
+
+1 
+	~<Rm©h.h
+>
+
+3 
+	~"cudaLogReg.h
+"
+
+4 
+	~"cudaLogReg-utžs.h
+"
+
+6 
+	$_sum_m©riûs
+(cÚ¡ * 
+»¡riù
+ 
+A
+, cÚ¡ *„e¡riù 
+B
+,
+
+7 cÚ¡ 
+®pha
+, * 
+»¡riù
+ 
+C
+,
+
+8 cÚ¡ 
+Äow
+, cÚ¡ 
+ncÞ
+) {
+
+10 
+j
+ = 0; j < 
+ncÞ
+; j++) {
+
+11 
+i
+ = 0; i < 
+Äow
+; i++) {
+
+12 
+C
+[
+	`idx
+(
+i
+, 
+j
+, 
+Äow
+)] = 
+A
+[idx(i, j,‚row)] + 
+®pha
+ * 
+B
+[idx(i, j,‚row)];
+
+15 
+	}
+}
+
+17 
+	$_log_sum_exp
+(cÚ¡ * 
+»¡riù
+ 
+¬¿y
+, cÚ¡ 
+¬_size
+) {
+
+19 
+sum
+ = 0.0;
+
+20 
+¬¿y_max
+ = 
+¬¿y
+[0];
+
+23 
+i
+ = 1; i < 
+¬_size
+; i++) {
+
+24 ià(
+¬¿y
+[
+i
+] > 
+¬¿y_max
+) {
+
+25 
+¬¿y_max
+ = 
+¬¿y
+[
+i
+];
+
+29 
+i
+ = 0; i < 
+¬_size
+; i++) {
+
+30 
+sum
+ +ð
+	`exp
+(
+¬¿y
+[
+i
+] - 
+¬¿y_max
+);
+
+32  
+¬¿y_max
+ + 
+	`log
+(
+sum
+);
+
+33 
+	}
+}
+
+	@cudaLogReg-utils.h
+
+1 #iâdeà
+CUDALOGREGUTILS
+
+
+2 
+	#CUDALOGREGUTILS
+
+
+	)
+
+4 
+_sum_m©riûs
+(cÚ¡ * 
+»¡riù
+ 
+A
+, cÚ¡ *„e¡riù 
+B
+,
+
+5 cÚ¡ 
+®pha
+, * 
+»¡riù
+ 
+C
+,
+
+6 cÚ¡ 
+Äow
+, cÚ¡ 
+ncÞ
+);
+
+8 
+_log_sum_exp
+(cÚ¡ * 
+»¡riù
+ 
+¬¿y
+, cÚ¡ 
+¬_size
+);
+
+	@cudaLogReg.h
+
+1 #iâdeà
+CUDALOGREG
+
+
+2 
+	#CUDALOGREG
+
+
+	)
+
+4 
+	~<R_ext/P¹Utž.h
+>
+
+6 
+	~<cuda.h
+>
+
+7 
+	~<cuda_ruÁime.h
+>
+
+8 
+	~<cubÏs_v2.h
+>
+
+15 
+	#idx
+(
+i
+, 
+j
+, 
+lda
+è(((jè* (ldaè+ (iè))
+
+	)
+
+18 
+	#IDMAT
+(
+M
+, 
+K
+) { \
+
+19 
+M
+ =ð(*)
+	`R_®loc
+(
+K
+ * K, ()); \
+
+20 
+	`mem£t
+(
+M
+, 0.0, 
+K
+ * K * ()); \
+
+21 
+i
+ = 0; i < 
+K
+; i++è
+M
+[i * K + i] = 1.0; \
+
+22 }
+
+	)
+
+28 
+	#CUDA_CALL
+(
+x
+è{if((xè!ð
+cudaSucûss
+) { \
+
+29 
+	`R´štf
+("CUDAƒ¼Ü‡ˆ%s:%d\n", 
+__FILE__
+, 
+__LINE__
+); \
+
+30 
+	`R´štf
+(" %s\n", 
+	`cudaG‘E¼ÜSŒšg
+(
+	`cudaG‘La¡E¼Ü
+())); \
+
+31 
+	`cudaDeviûRe£t
+(); \
+
+32 
+	`”rÜ
+("CUDA c®Èha çžed\n");}}
+
+	)
+
+37 
+	#CUBLAS_CALL
+(
+x
+è{
+cubÏsStus_t
+ 
+cubÏs_”r_¡©us
+ = (x); \
+
+38 if(
+cubÏs_”r_¡©us
+ !ð
+CUBLAS_STATUS_SUCCESS
+){ \
+
+39 
+	`R´štf
+("CUBLASƒ¼Ü‡ˆ%s:%d\n", 
+__FILE__
+, 
+__LINE__
+); \
+
+40 
+	`R´štf
+(" %s\n", 
+	`_cubÏsG‘E¼ÜSŒšg
+(
+cubÏs_”r_¡©us
+)); \
+
+41 
+	`cudaDeviûRe£t
+(); \
+
+42 
+	`”rÜ
+("CUBLAS c®Èha çžed\n");}}
+
+	)
+
+44 
+šlše
+ cÚ¡ *
+	$_cubÏsG‘E¼ÜSŒšg
+(
+cubÏsStus_t
+ 
+”rÜ
+) {
+
+45 
+”rÜ
+) {
+
+46 
+CUBLAS_STATUS_LICENSE_ERROR
+:
+
+49 
+CUBLAS_STATUS_NOT_INITIALIZED
+:
+
+52 
+CUBLAS_STATUS_NOT_SUPPORTED
+:
+
+55 
+CUBLAS_STATUS_ALLOC_FAILED
+:
+
+58 
+CUBLAS_STATUS_INVALID_VALUE
+:
+
+61 
+CUBLAS_STATUS_ARCH_MISMATCH
+:
+
+64 
+CUBLAS_STATUS_MAPPING_ERROR
+:
+
+67 
+CUBLAS_STATUS_EXECUTION_FAILED
+:
+
+70 
+CUBLAS_STATUS_INTERNAL_ERROR
+:
+
+75 
+	}
+}
+
+	@entrypoints-model_logreg_C.c
+
+1 
+	~<R.h
+>
+
+2 
+	~<Rdefšes.h
+>
+
+4 
+	~"cudaLogReg.h
+"
+
+5 
+	~"mod–_log»g_C.h
+"
+
+6 
+	~"’Œypošts-mod–_log»g_C.h
+"
+
+9 
+SEXP
+ 
+	$g‘_cÚd´ob_log»g_
+(
+SEXP
+ 
+X
+, SEXP 
+W
+, SEXP 
+nÜm®ize
+, SEXP 
+log_domaš
+) {
+
+11 
+ÅrÙ
+ = 0;
+
+13 * 
+nÜm®ize_±r
+ = 
+	`LOGICAL
+(
+nÜm®ize
+);
+
+14 * 
+log_domaš_±r
+ = 
+	`LOGICAL
+(
+log_domaš
+);
+
+16 * 
+X_±r
+ = 
+	`REAL
+(
+X
+);
+
+17 * 
+W_±r
+ = 
+	`REAL
+(
+W
+);
+
+19 * 
+dim_X
+ = 
+	`INTEGER
+(
+	`GET_DIM
+(
+X
+));
+
+20 * 
+dim_W
+ = 
+	`INTEGER
+(
+	`GET_DIM
+(
+W
+));
+
+22 
+N
+ = 
+dim_X
+[0], 
+K
+ = 
+dim_W
+[0];
+
+25 
+SEXP
+ 
+Y
+; 
+	`PROTECT
+(Y = 
+	`®locM©rix
+(
+REALSXP
+, 
+K
+, 
+N
+)); 
+ÅrÙ
+++;
+
+27 * 
+dim_Y
+ = 
+	`INTEGER
+(
+	`GET_DIM
+(
+Y
+));
+
+29 
+	`mem£t
+(
+	`REAL
+(
+Y
+), 0.0, 
+K
+ * 
+N
+ * ());
+
+31 * 
+Y_±r
+ = 
+	`REAL
+(
+Y
+);
+
+33 
+	`_£t_cÚd´ob_log»g
+(
+X_±r
+, 
+dim_X
+,
+
+34 
+W_±r
+, 
+dim_W
+,
+
+35 
+Y_±r
+, 
+dim_Y
+,
+
+36 
+nÜm®ize_±r
+[0],
+
+37 
+log_domaš_±r
+[0]);
+
+38 
+	`UNPROTECT
+(
+ÅrÙ
+);
+
+39  (
+Y
+);
+
+40 
+	}
+}
+
+43 
+SEXP
+ 
+	$g‘_co¡_log»g_
+(
+SEXP
+ 
+X
+, SEXP 
+W
+, SEXP 
+T
+) {
+
+45 
+ÅrÙ
+ = 0;
+
+47 * 
+X_±r
+ = 
+	`REAL
+(
+X
+);
+
+48 * 
+W_±r
+ = 
+	`REAL
+(
+W
+);
+
+49 * 
+T_±r
+ = 
+	`REAL
+(
+T
+);
+
+51 * 
+dim_X
+ = 
+	`INTEGER
+(
+	`GET_DIM
+(
+X
+));
+
+52 * 
+dim_W
+ = 
+	`INTEGER
+(
+	`GET_DIM
+(
+W
+));
+
+53 * 
+dim_T
+ = 
+	`INTEGER
+(
+	`GET_DIM
+(
+T
+));
+
+55 
+SEXP
+ 
+co¡
+; 
+	`PROTECT
+(co¡ = 
+	`®locVeùÜ
+(
+REALSXP
+, 1)); 
+ÅrÙ
+++;
+
+57 
+	`mem£t
+(
+	`REAL
+(
+co¡
+), 0.0, ());
+
+59 * 
+co¡_±r
+ = 
+	`REAL
+(
+co¡
+);
+
+61 *
+co¡_±r
+ = 
+	`_g‘_co¡_log»g
+(
+X_±r
+, 
+dim_X
+, 
+W_±r
+,
+
+62 
+dim_W
+, 
+T_±r
+, 
+dim_T
+);
+
+63 
+	`UNPROTECT
+(
+ÅrÙ
+);
+
+64  (
+co¡
+);
+
+65 
+	}
+}
+
+68 
+SEXP
+ 
+	$g‘_g¿d_log»g_
+(
+SEXP
+ 
+X
+, SEXP 
+W
+, SEXP 
+T
+) {
+
+70 
+ÅrÙ
+ = 0;
+
+72 * 
+X_±r
+ = 
+	`REAL
+(
+X
+);
+
+73 * 
+W_±r
+ = 
+	`REAL
+(
+W
+);
+
+74 * 
+T_±r
+ = 
+	`REAL
+(
+T
+);
+
+76 * 
+dim_X
+ = 
+	`INTEGER
+(
+	`GET_DIM
+(
+X
+));
+
+77 * 
+dim_W
+ = 
+	`INTEGER
+(
+	`GET_DIM
+(
+W
+));
+
+78 * 
+dim_T
+ = 
+	`INTEGER
+(
+	`GET_DIM
+(
+T
+));
+
+80 
+M
+ = 
+dim_X
+[1], 
+K
+ = 
+dim_W
+[0];
+
+82 
+SEXP
+ 
+g¿d
+; 
+	`PROTECT
+(g¿d = 
+	`®locM©rix
+(
+REALSXP
+, 
+M
+, 
+K
+)); 
+ÅrÙ
+++;
+
+83 * 
+g¿d_±r
+ = 
+	`REAL
+(
+g¿d
+);
+
+84 
+	`mem£t
+(
+g¿d_±r
+, 0.0, (è* 
+M
+ * 
+K
+);
+
+85 * 
+dim_g¿d
+ = 
+	`INTEGER
+(
+	`GET_DIM
+(
+g¿d
+));
+
+87 
+	`_£t_g¿d_log»g
+(
+X_±r
+, 
+dim_X
+,
+
+88 
+W_±r
+, 
+dim_W
+,
+
+89 
+T_±r
+, 
+dim_T
+,
+
+90 
+g¿d_±r
+, 
+dim_g¿d
+);
+
+92 
+	`UNPROTECT
+(
+ÅrÙ
+);
+
+93  (
+g¿d
+);
+
+94 
+	}
+}
+
+	@entrypoints-model_logreg_C.h
+
+1 #iâdeà
+ENTRYPOINSMODEL_LOGREG_C
+
+
+2 
+	#ENTRYPOINSMODEL_LOGREG_C
+
+
+	)
+
+4 
+	~<Rdefšes.h
+>
+
+6 #ifdef 
+__ýlu¥lus
+
+
+9 
+SEXP
+ 
+g‘_cÚd´ob_log»g_
+(SEXP 
+X
+, SEXP 
+W
+, SEXP 
+nÜm®ize
+, SEXP 
+log_domaš
+);
+
+10 
+SEXP
+ 
+g‘_co¡_log»g_
+(SEXP 
+X
+, SEXP 
+W
+, SEXP 
+T
+);
+
+11 
+SEXP
+ 
+g‘_g¿d_log»g_
+(SEXP 
+X
+, SEXP 
+W
+, SEXP 
+T
+);
+
+12 #ifdef 
+__ýlu¥lus
+
+
+	@entrypoints-model_logreg_cuda.h
+
+1 #iâdeà
+ENTRYPOINTSMODEL_LOGREG_CUDA
+
+
+2 
+	#ENTRYPOINTSMODEL_LOGREG_CUDA
+
+
+	)
+
+4 
+	~<Rdefšes.h
+>
+
+6 #ifdef 
+__ýlu¥lus
+
+
+9 
+SEXP
+ 
+g‘_cÚd´ob_log»g_cuda
+(SEXP 
+X
+, SEXP 
+W
+, SEXP 
+nÜm®ize
+, SEXP 
+log_domaš
+);
+
+10 
+SEXP
+ 
+g‘_co¡_log»g_cuda
+(SEXP 
+X
+, SEXP 
+W
+, SEXP 
+T
+);
+
+11 
+SEXP
+ 
+g‘_g¿d_log»g_cuda
+(SEXP 
+X
+, SEXP 
+W
+, SEXP 
+T
+);
+
+12 #ifdef 
+__ýlu¥lus
+
+
+	@entrypoints-trainer_gd_C.c
+
+1 
+	~<R.h
+>
+
+2 
+	~<Rdefšes.h
+>
+
+3 
+	~<R_ext/BLAS.h
+>
+
+4 
+	~"cudaLogReg.h
+"
+
+5 
+	~"’Œypošts-Œaš”_gd_C.h
+"
+
+6 
+	~"mod–_log»g_C.h
+"
+
+8 
+SEXP
+ 
+	$Œaš_gd_
+(
+SEXP
+ 
+X
+, SEXP 
+W
+, SEXP 
+T
+, SEXP 
+¡•_size
+, SEXP 
+max_™”
+,
+
+9 
+SEXP
+ 
+v”bo£
+, SEXP 
+tÞ
+) {
+
+11 
+ÅrÙ
+ = 0;
+
+13 * 
+X_±r
+ = 
+	`REAL
+(
+X
+);
+
+14 * 
+W_±r
+ = 
+	`REAL
+(
+W
+);
+
+15 * 
+T_±r
+ = 
+	`REAL
+(
+T
+);
+
+17 * 
+¡•_size_±r
+ = 
+	`REAL
+(
+¡•_size
+);
+
+18 * 
+max_™”_±r
+ = 
+	`INTEGER
+(
+max_™”
+);
+
+19 * 
+v”bo£_±r
+ = 
+	`LOGICAL
+(
+v”bo£
+);
+
+20 * 
+tÞ_±r
+ = 
+	`REAL
+(
+tÞ
+);
+
+23 * 
+dim_X
+ = 
+	`INTEGER
+(
+	`GET_DIM
+(
+X
+));
+
+24 * 
+dim_W
+ = 
+	`INTEGER
+(
+	`GET_DIM
+(
+W
+));
+
+25 * 
+dim_T
+ = 
+	`INTEGER
+(
+	`GET_DIM
+(
+T
+));
+
+26 
+M
+ = 
+dim_X
+[1], 
+K
+ = 
+dim_W
+[0];
+
+29 
+SEXP
+ 
+g¿d
+; 
+	`PROTECT
+(g¿d = 
+	`®locM©rix
+(
+REALSXP
+, 
+K
+, 
+M
+)); 
+ÅrÙ
+++;
+
+30 
+SEXP
+ 
+™”
+; 
+	`PROTECT
+(™” = 
+	`®locVeùÜ
+(
+INTSXP
+, 1)); 
+ÅrÙ
+++;
+
+31 
+SEXP
+ 
+co¡
+; 
+	`PROTECT
+(co¡ = 
+	`®locVeùÜ
+(
+REALSXP
+, 1)); 
+ÅrÙ
+++;
+
+34 * 
+g¿d_±r
+ = 
+	`REAL
+(
+g¿d
+);
+
+35 * 
+™”_±r
+ = 
+	`INTEGER
+(
+™”
+);
+
+36 * 
+co¡_±r
+ = 
+	`REAL
+(
+co¡
+);
+
+38 * 
+dim_g¿d
+ = 
+	`INTEGER
+(
+	`GET_DIM
+(
+g¿d
+));
+
+40 * 
+W_Þd_±r
+ = 
+	`C®loc
+(
+K
+ * 
+M
+, );
+
+43 
+¡•
+ = *
+¡•_size_±r
+;
+
+44 *
+co¡_±r
+ = 
+	`_g‘_co¡_log»g
+(
+X_±r
+, 
+dim_X
+, 
+W_±r
+, 
+dim_W
+, 
+T_±r
+, 
+dim_T
+);
+
+45 
+co¡_Ãw
+ = 
+R_PosInf
+;
+
+47 
+Úe
+ = 1, 
+g¿d_Ën
+ = 
+K
+ * 
+M
+;
+
+48 
+®pha
+ = 0, 
+g¿d_nÜm
+ = 
+R_PosInf
+;
+
+50 
+¡Ý_cÚd™iÚ
+ = 0;
+
+51 *
+™”_±r
+ = 0;
+
+52 !
+¡Ý_cÚd™iÚ
+) {
+
+53 *
+™”_±r
+ += 1;
+
+54 if(*
+v”bo£_±r
+è
+	`R´štf
+("™”©iÚ: %d/%d\n", *
+™”_±r
+, *
+max_™”_±r
+);
+
+55 if(*
+v”bo£_±r
+è
+	`R´štf
+("¡•_size: %f\n", 
+¡•
+);
+
+56 if(*
+v”bo£_±r
+è
+	`R´štf
+("co¡: %f\n", *
+co¡_±r
+);
+
+58 
+	`memýy
+(
+W_Þd_±r
+, 
+W_±r
+, 
+K
+ * 
+M
+ * ());
+
+60 
+	`_£t_g¿d_log»g
+(
+X_±r
+, 
+dim_X
+, 
+W_±r
+, 
+dim_W
+, 
+T_±r
+,
+
+61 
+dim_T
+, 
+g¿d_±r
+, 
+dim_g¿d
+);
+
+63 
+®pha
+ = -1.0 * 
+¡•
+;
+
+64 
+	`F77_CALL
+(
+daxpy
+)(&
+g¿d_Ën
+, &
+®pha
+, 
+g¿d_±r
+, &
+Úe
+, 
+W_±r
+, &one);
+
+66 
+co¡_Ãw
+ = 
+	`_g‘_co¡_log»g
+(
+X_±r
+, 
+dim_X
+, 
+W_±r
+, 
+dim_W
+, 
+T_±r
+, 
+dim_T
+);
+
+67 if(
+co¡_Ãw
+ < *
+co¡_±r
+) {
+
+68 
+¡•
+ *= 1.1;
+
+69 *
+co¡_±r
+ = 
+co¡_Ãw
+;
+
+71 
+¡•
+ *= 0.5;
+
+72 
+W_±r
+ = 
+W_Þd_±r
+;
+
+74 
+g¿d_nÜm
+ = 
+	`F77_CALL
+(
+dÄm2
+)(&
+g¿d_Ën
+, 
+g¿d_±r
+, &
+Úe
+);
+
+75 
+¡Ý_cÚd™iÚ
+ = (*
+™”_±r
+ > *
+max_™”_±r
+è|| (
+g¿d_nÜm
+ < *
+tÞ_±r
+);
+
+78 
+	`F»e
+(
+W_Þd_±r
+);
+
+81 
+SEXP
+ 
+»suÉs
+;„esuÉ ð
+	`PROTECT
+(
+	`®locVeùÜ
+(
+VECSXP
+, 4)); 
+ÅrÙ
+++;
+
+82 
+	`SET_VECTOR_ELT
+(
+»suÉs
+, 0, 
+W
+);
+
+83 
+	`SET_VECTOR_ELT
+(
+»suÉs
+, 1, 
+co¡
+);
+
+84 
+	`SET_VECTOR_ELT
+(
+»suÉs
+, 2, 
+g¿d
+);
+
+85 
+	`SET_VECTOR_ELT
+(
+»suÉs
+, 3, 
+™”
+);
+
+87  
+»suÉs
+;
+
+88 
+	}
+}
+
+	@entrypoints-trainer_gd_C.h
+
+1 #iâdeà
+ENTRYPOINTS_TRAINSGD_C
+
+
+2 
+	#ENTRYPOINTS_TRAINSGD_C
+
+
+	)
+
+4 
+	~<Rdefšes.h
+>
+
+6 #ifdef 
+__ýlu¥lus
+
+
+10 
+SEXP
+ 
+Œaš_gd_
+(SEXP 
+X
+, SEXP 
+W
+, SEXP 
+T
+, SEXP 
+¡•_size
+,
+
+11 
+SEXP
+ 
+max_™”
+, SEXP 
+v”bo£
+, SEXP 
+tÞ
+);
+
+13 #ifdef 
+__ýlu¥lus
+
+
+	@model_logreg_C.c
+
+1 
+	~<R.h
+>
+
+2 
+	~<R_ext/BLAS.h
+>
+
+4 
+	~"cudaLogReg.h
+"
+
+6 
+	~"cudaLogReg-utžs.h
+"
+
+7 
+	~"co¡-funùiÚs_C.h
+"
+
+8 
+	~"mod–_log»g_C.h
+"
+
+10 
+	$_£t_cÚd´ob_log»g
+(cÚ¡ * 
+»¡riù
+ 
+X
+, cÚ¡ *„e¡riù 
+dim_X
+,
+
+11 cÚ¡ * 
+»¡riù
+ 
+W
+, cÚ¡ *„e¡riù 
+dim_W
+,
+
+12 * 
+»¡riù
+ 
+Y
+, cÚ¡ *„e¡riù 
+dim_Y
+,
+
+13 cÚ¡ 
+nÜm®ize
+, cÚ¡ 
+log_domaš
+) {
+
+15 ià(
+dim_X
+[0] !ð
+dim_Y
+[1]è
+	`”rÜ
+("dimensions mismatch");
+
+16 
+N
+ = 
+dim_X
+[0];
+
+17 ià(
+dim_X
+[1] !ð
+dim_W
+[1]è
+	`”rÜ
+("dimensions mismatch");
+
+18 
+M
+ = 
+dim_X
+[1];
+
+19 ià(
+dim_W
+[0] !ð
+dim_Y
+[0]è
+	`”rÜ
+("dimensions mismatch");
+
+20 
+K
+ = 
+dim_W
+[0];
+
+23 * 
+Œªs_W
+ = "N", * 
+Œªs_X
+ = "T";
+
+24 
+®pha
+ = 1.0, 
+b‘a
+ = 0.0;
+
+25 
+	`F77_CALL
+(
+dgemm
+)(
+Œªs_W
+, 
+Œªs_X
+, &
+K
+, &
+N
+, &
+M
+, &
+®pha
+,
+
+26 
+W
+, &
+K
+, 
+X
+, &
+N
+, &
+b‘a
+, 
+Y
+, &K);
+
+29 ià(
+nÜm®ize
+) {
+
+30 
+log_evid’û
+ = 0;
+
+31 
+j
+ = 0; j < 
+N
+; j++) {
+
+32 
+log_evid’û
+ = 
+	`_log_sum_exp
+(&
+Y
+[
+j
+ * 
+K
+], K);
+
+35 
+i
+ = 0; i < 
+K
+; i++) {
+
+36 
+Y
+[
+	`idx
+(
+i
+, 
+j
+, 
+K
+)] -ð
+log_evid’û
+;
+
+42 ià(!
+log_domaš
+) {
+
+43 
+j
+ = 0; j < 
+N
+; j++) {
+
+44 
+i
+ = 0; i < 
+K
+; i++) {
+
+45 
+Y
+[
+	`idx
+(
+i
+, 
+j
+, 
+K
+)] = 
+	`exp
+(Y[idx(i, j, K)]);
+
+49 
+	}
+}
+
+51 
+	$_g‘_co¡_log»g
+(cÚ¡ * 
+»¡riù
+ 
+X
+, cÚ¡ *„e¡riù 
+dim_X
+,
+
+52 cÚ¡ * 
+»¡riù
+ 
+W
+, cÚ¡ *„e¡riù 
+dim_W
+,
+
+53 cÚ¡ * 
+»¡riù
+ 
+T
+, cÚ¡ *„e¡riù 
+dim_T
+) {
+
+55 
+K
+ = 
+dim_T
+[0];
+
+56 
+N
+ = 
+dim_T
+[1];
+
+57 * 
+log_Y_±r
+ = 
+	`C®loc
+(
+K
+ * 
+N
+, );
+
+59 
+dim_log_Y
+[2] = {
+K
+, 
+N
+};
+
+61 
+	`_£t_cÚd´ob_log»g
+(
+X
+, 
+dim_X
+, 
+W
+, 
+dim_W
+, 
+log_Y_±r
+, 
+dim_log_Y
+, 1, 1);
+
+62 
+co¡
+ = 
+	`_g‘_üoss_’ŒÝy
+(
+log_Y_±r
+, 
+dim_log_Y
+, 
+T
+, 
+dim_T
+);
+
+64 
+	`F»e
+(
+log_Y_±r
+);
+
+66  
+co¡
+;
+
+67 
+	}
+}
+
+69 
+	$_£t_g¿d_log»g
+(cÚ¡ * 
+»¡riù
+ 
+X
+, cÚ¡ *„e¡riù 
+dim_X
+,
+
+70 cÚ¡ * 
+»¡riù
+ 
+W
+, cÚ¡ *„e¡riù 
+dim_W
+,
+
+71 cÚ¡ * 
+»¡riù
+ 
+T
+, cÚ¡ *„e¡riù 
+dim_T
+,
+
+72 * 
+»¡riù
+ 
+g¿d
+, cÚ¡ *„e¡riù 
+dim_g¿d
+) {
+
+75 iàÐ
+dim_X
+[1] !ð
+dim_g¿d
+[0]è
+	`”rÜ
+("dimensions mismatch");
+
+76 ià(
+dim_g¿d
+[0] !ð
+dim_W
+[1]è
+	`”rÜ
+("dimensions mismatch");
+
+77 
+M
+ = 
+dim_X
+[1];
+
+78 ià(
+dim_X
+[0] !ð
+dim_T
+[1]è
+	`”rÜ
+("dimensions mismatch");
+
+79 
+N
+ = 
+dim_X
+[0];
+
+80 ià(
+dim_W
+[0] !ð
+dim_T
+[0]è
+	`”rÜ
+("dimensions mismatch");
+
+81 ià(
+dim_T
+[0] !ð
+dim_g¿d
+[1]è
+	`”rÜ
+("dimensions mismatch");
+
+82 
+K
+ = 
+dim_W
+[0];
+
+84 * 
+Y_±r
+ = 
+	`C®loc
+(
+K
+ * 
+N
+, );
+
+85 
+dim_Y
+[2] = {
+K
+, 
+N
+};
+
+86 
+	`_£t_cÚd´ob_log»g
+(
+X
+, 
+dim_X
+, 
+W
+, 
+dim_W
+, 
+Y_±r
+, 
+dim_Y
+, 1, 0);
+
+88 * 
+Y_mšus_T_±r
+ = 
+	`C®loc
+(
+K
+ * 
+N
+, );
+
+89 
+	`_sum_m©riûs
+(
+Y_±r
+, 
+T
+, -1, 
+Y_mšus_T_±r
+, 
+K
+, 
+N
+);
+
+90 
+	`F»e
+(
+Y_±r
+);
+
+93 * 
+Œªs_X
+ = "T", * 
+Œªs_Y_mšus_T
+ = "T";
+
+94 
+®pha
+ = 1.0, 
+b‘a
+ = 0.0;
+
+95 
+	`F77_CALL
+(
+dgemm
+)(
+Œªs_X
+, 
+Œªs_Y_mšus_T
+,
+
+96 &
+M
+, &
+K
+, &
+N
+, &
+®pha
+, 
+X
+, &N, 
+Y_mšus_T_±r
+,
+
+97 &
+K
+, &
+b‘a
+, 
+g¿d
+, &
+M
+);
+
+98 
+	`F»e
+(
+Y_mšus_T_±r
+);
+
+99 
+	}
+}
+
+	@model_logreg_C.h
+
+1 #iâdeà
+MODEL_LOGREG_C
+
+
+2 
+	#MODEL_LOGREG_C
+
+
+	)
+
+4 
+_£t_cÚd´ob_log»g
+(cÚ¡ * 
+»¡riù
+ 
+X
+, cÚ¡ *„e¡riù 
+dim_X
+,
+
+5 cÚ¡ * 
+»¡riù
+ 
+W
+, cÚ¡ *„e¡riù 
+dim_W
+,
+
+6 * 
+»¡riù
+ 
+Y
+, cÚ¡ *„e¡riù 
+dim_Y
+,
+
+7 cÚ¡ 
+nÜm®ize
+, cÚ¡ 
+log_domaš
+);
+
+9 
+_g‘_co¡_log»g
+(cÚ¡ * 
+»¡riù
+ 
+X
+, cÚ¡ *„e¡riù 
+dim_X
+,
+
+10 cÚ¡ * 
+»¡riù
+ 
+W
+, cÚ¡ *„e¡riù 
+dim_W
+,
+
+11 cÚ¡ * 
+»¡riù
+ 
+T
+, cÚ¡ *„e¡riù 
+dim_T
+);
+
+13 
+_£t_g¿d_log»g
+(cÚ¡ * 
+»¡riù
+ 
+X
+, cÚ¡ *„e¡riù 
+dim_X
+,
+
+14 cÚ¡ * 
+»¡riù
+ 
+W
+, cÚ¡ *„e¡riù 
+dim_W
+,
+
+15 cÚ¡ * 
+»¡riù
+ 
+T
+, cÚ¡ *„e¡riù 
+dim_T
+,
+
+16 * 
+»¡riù
+ 
+g¿d
+, cÚ¡ *„e¡riù 
+dim_g¿d
+);
+
+	@model_logreg_cuda.h
+
+1 #iâdeà
+MODEL_LOGREG_CUDA
+
+
+2 
+	#MODEL_LOGREG_CUDA
+
+
+	)
+
+3 
+	~<cubÏs_v2.h
+>
+
+5 
+_£t_cÚd´ob_log»g_cuda
+(
+cubÏsHªdË_t
+ 
+hªdË
+,
+
+6 cÚ¡ * 
+__»¡riù__
+ 
+dev_X
+,
+
+7 cÚ¡ * 
+__»¡riù__
+ 
+dev_W
+,
+
+8 * 
+__»¡riù__
+ 
+dev_Y
+,
+
+9 cÚ¡ 
+M
+, cÚ¡ 
+N
+, cÚ¡ 
+K
+,
+
+10 cÚ¡ 
+nÜm®ize
+, cÚ¡ 
+log_domaš
+);
+
+12 
+_£t_co¡_log»g_cuda
+(
+cubÏsHªdË_t
+ 
+hªdË
+,
+
+13 cÚ¡ * 
+__»¡riù__
+ 
+dev_X
+,
+
+14 cÚ¡ * 
+__»¡riù__
+ 
+dev_W
+,
+
+15 cÚ¡ * 
+__»¡riù__
+ 
+dev_T
+,
+
+16 * 
+__»¡riù__
+ 
+dev_log_Y
+,
+
+17 cÚ¡ 
+M
+, cÚ¡ 
+N
+, cÚ¡ 
+K
+,
+
+18 * 
+__»¡riù__
+ 
+dev_co¡
+);
+
+20 
+_£t_g¿d_log»g_cuda
+(
+cubÏsHªdË_t
+ 
+hªdË
+,
+
+21 cÚ¡ * 
+__»¡riù__
+ 
+dev_X
+,
+
+22 cÚ¡ * 
+__»¡riù__
+ 
+dev_W
+,
+
+23 cÚ¡ * 
+__»¡riù__
+ 
+dev_T
+,
+
+24 * 
+__»¡riù__
+ 
+dev_Y
+,
+
+25 * 
+__»¡riù__
+ 
+dev_Y_mšus_T
+,
+
+26 cÚ¡ 
+M
+, cÚ¡ 
+N
+, cÚ¡ 
+K
+,
+
+27 * 
+__»¡riù__
+ 
+dev_g¿d
+);
+
+	@
+1
+.
+1
+/usr/include
+14
+305
+cost-functions_C.c
+cost-functions_C.h
+cudaLogReg-init.c
+cudaLogReg-utils.c
+cudaLogReg-utils.h
+cudaLogReg.h
+entrypoints-model_logreg_C.c
+entrypoints-model_logreg_C.h
+entrypoints-model_logreg_cuda.h
+entrypoints-trainer_gd_C.c
+entrypoints-trainer_gd_C.h
+model_logreg_C.c
+model_logreg_C.h
+model_logreg_cuda.h
