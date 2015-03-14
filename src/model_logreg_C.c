@@ -13,7 +13,7 @@ void _set_condprob_logreg(const double * restrict X, const int * restrict dim_X,
                           const int normalize, const int log_domain) {
 
 
-  int N = dim_X[0], dim_X[1], K = dim_W[0];
+  int N = dim_X[0], M = dim_X[1], K = dim_W[0];
 
   // Computing activation
   char * trans_W = "N", * trans_X = "T";
