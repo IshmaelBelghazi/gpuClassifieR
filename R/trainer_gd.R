@@ -32,10 +32,6 @@ train.model.spec <- function(object, feats, targets, decay=NULL, step_size=NULL,
     stopifnot(NROW(object$weights) == NCOL(feats))
     stopifnot(NCOL(object$weights) == NCOL(targets))
 
-    if(is.null(step_size)) {
-        message("unspecified step size. defaulting to 0.01")
-        step_size <- 0.01
-    }
     if(is.null(max_iter)) {
         message("no maximum iteration specified. Running until convergence.")
         max_iter <- Inf
@@ -85,6 +81,7 @@ train_gd_R <- function(object, feats, targets, decay=NULL , step_size=NULL, max_
     ## initializing training variables
     cost <- get_cost(object, feats, targets, decay, backend)
     stop_condition <- FALSE
+    iter <- 0
     while(!stop_condition) {
         iter <- iter + 1
         if (verbose) message(sprintf("iteration: %d/%d", iter, max_iter))

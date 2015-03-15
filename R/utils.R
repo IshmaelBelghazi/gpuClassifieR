@@ -1,4 +1,5 @@
 ## * Various utility functions
+## ** Log Sum exp
 ##' Log sum exp in R
 ##'
 ##' @param x vector to log sum exp

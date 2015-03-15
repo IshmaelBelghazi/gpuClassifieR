@@ -81,3 +81,65 @@ get_cost.default <-  function(object, feats, targets, decay=NULL, backend="R", .
 get_cost.model.spec <- function(object, feats, targets, decay=NULL, backend="R", ...) {
     object$cost_fun(feats, coef(object), targets, decay, backend)
 }
+## ** Class conditional probabilities getter
+
+##' Class conditional probabilities getter generic
+##'
+##'
+##' @param object Object of class model.spec
+##' @param feats features (N X M)
+##' @param normalize normalize probabilities
+##' @param log_domain return log probabilities
+##' @param backend Computation backend ("R", "C", or "CUDA")
+##' @param ... Pass through parameters
+##' @return Class conditional probabilities
+##' @author Mohamed Ishmael Diwan Belghazi
+get_prob <- function(object, feats, normalize=TRUE,
+                     log_domain=FALSE, backend="R", ...) {
+    UseMethod("get_prob")
+}
+
+get_prob.default <- function(object, feats, normalize=TRUE,
+                     log_domain=FALSE, backend="R", ...) {
+    stop("unknown object class")
+}
+
+##' @describeIn get_prob Class conditional probabilities getter
+get_prob.model.spec <- function(object, feats, normalize=TRUE,
+                                log_domain=FALSE, backend="R", ...) {
+    object$cond_prob_fun(feats, coef(object), normalize=normalize,
+                         log_domain=log_domain, backend=backend)
+}
+
+## ** misclassification rate
+
+##' Get model misclassification rate generic
+##'
+##' @param object Object of class model.spec
+##' @param feats features to predict
+##' @param targets Real targets
+##' @param backend Computation backend ("R", "C", or "CUDA")
+##' @return Misclassification rate
+##' @author Mohamed Ishmael Diwan Belghazi
+get_error <- function(object, feats, targets, backend="R") UseMethod("get_error")
+
+get_error.default <- function(object, feats, targets, backend="R") {
+    stop("Unknown object class")
+}
+##' @describeIn get_error Get model miscclassification rate
+get_error.model.spec <- function(object, feats, targets, backend="R") {
+
+    get_error_logreg(predict(object, feats, backend), targets, backend)
+
+}
+
+## ** Predict
+predict.model.spec <- function(object, newfeats, backend="R", ...) {
+
+    if (NCOL(newfeats) != object$n_feats)
+        stop("dimension mismatch")
+
+    condprob <- get_prob(object, newfeats, normalize=TRUE, log_domain=FALSE,
+                          backend=backend)
+    predict_class_logreg(condprob)
+}

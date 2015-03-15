@@ -1,12 +1,4 @@
-##' Computes Logistic regression class conditional probabilities
-##'
-##' @param feats features. (N feats M)
-##' @param weights model weights. (M feats K)
-##' @param normalize Normalize probabilties
-##' @param log_domain Compute log-probabilties
-##' @param backend Computation backend ("R", "C", or "CUDA")
-##' @return Class conditional probabilities
-##' @author Mohamed Ishmael Diwan Belghazi
+## * Class conditional probabilities
 ##' @useDynLib cudaLogReg, .registration=TRUE
 get_condprob_logreg <- function(feats, weights, normalize=TRUE,
                                 log_domain=FALSE, backend="R") {
@@ -40,16 +32,7 @@ get_condprob_logreg <- function(feats, weights, normalize=TRUE,
        })
     return(condprob)
 }
-
-##' Computes cost function for logistic regression
-##'
-##' @param feats Features (N feats M)
-##' @param weights Model weights (M feats K)
-##' @param targets Targets (N feats K)
-##' @param decay L2 regularization decay factor
-##' @param backend Computation backend ("R", "C", or "CUDA")
-##' @return logistic regression cost (cross-entropy)
-##' @author Mohamed Ishmael Diwan
+## * Cost
 ##' @useDynLib cudaLogReg, .registration=TRUE
 get_cost_logreg <- function(feats, weights, targets, decay=0.0, backend="R") {
 
@@ -77,16 +60,7 @@ get_cost_logreg <- function(feats, weights, targets, decay=0.0, backend="R") {
     return(cost)
 }
 
-
-##' Computes gradient for logistic regression model
-##'
-##' @param feats Features. (N feats M)
-##' @param weights Model weights (M feats K)
-##' @param targets One-hot encoded targets (N feats K)
-##' @param decay L2 regularization decay factor
-##' @param backend Computation backend ("R", "C", or "CUDA")
-##' @return gradient (M feats K)
-##' @author Mohamed Ishmael Diwan Belghazi
+## * Cost gradient
 ##' @useDynLib cudaLogReg, .registration=TRUE
 get_grad_logreg <- function(feats, weights, targets, decay=0.0, backend = "R") {
 
@@ -113,4 +87,43 @@ get_grad_logreg <- function(feats, weights, targets, decay=0.0, backend = "R") {
            stop("unrecognized computation backend")
        })
     return(grad)
+}
+## * Misclassification rate
+get_error_logreg <- function(predictions, targets, backend="R") {
+
+    switch(backend,
+           R={
+               mis_rate <- 1 - mean(rowSums(predictions * targets))
+           },
+           C={
+               stop(paste(backend," not implemented"))
+           },
+           CUDA={
+               stop(paste(backend," not implemented"))
+           },
+       {
+           stop("unrecognized computation backend")
+       })
+    return(mis_rate)
+}
+
+predict_class_logreg <- function(condprob, backend="R") {
+    switch(backend,
+           R={
+               predictions <- mat.or.vec(NROW(condprob), NCOL(condprob))
+               max_idx <- max.col(condprob, ties.method = "first")
+               mapply(function(i, j) predictions[i, j] <<- 1.0,
+                      1:NROW(condprob), max_idx)
+           },
+           C={
+               stop(paste(backend," not implemented"))
+           },
+           CUDA={
+               stop(paste(backend," not implemented"))
+           },
+       {
+           stop("unrecognized computation backend")
+       })
+
+        return(predictions)
 }

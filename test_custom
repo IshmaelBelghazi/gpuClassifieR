@@ -1,0 +1,46 @@
+#!/usr/bin/env Rscript
+
+rm(list=ls())
+## * Package setup
+library(methods, quietly=TRUE) ## hasArgs is not loaded by default by Rscript
+library(devtools, quietly=TRUE)
+pkg_path <-  "."
+try(unload(pkg_path))
+document(pkg_path)
+load_all(pkg_path)
+test(pkg_path)
+
+## * Loading data set
+data(mini_mnist)
+feats <- mini_mnist$train$images
+targets <- mini_mnist$train$labels
+
+feats_oos <- mini_mnist$test$images
+targets_oos <- mini_mnist$test$labels
+
+
+## * Defining model
+## ** initial weights
+weights_init <- matrix(rnorm(NCOL(feats) * NCOL(targets)), NCOL(feats),
+                       NCOL(targets))
+## ** Building model
+model <- LogReg(weights_init=weights_init)
+
+## * Training model
+## ** Setting training variables
+max_iter <- 100
+decay <- 0
+step_size <- 0.01
+verbose <- TRUE
+tol <- 1e-6
+backend <- "R"
+## ** Training model
+model <- train(model, feats, targets, decay=decay, step_size=step_size,
+               max_iter=max_iter,verbose=verbose, tol=tol, backend=backend)
+## ** printing model misclassification rates
+mis_is <- get_error(model, feats, targets, backend)
+mis_oos <- get_error(model, feats_oos, targets_oos, backend)
+print("model in sample misclassification rate")
+print(mis_is)
+print("model out of sample misclassificationb rate")
+print(mis_oos)
