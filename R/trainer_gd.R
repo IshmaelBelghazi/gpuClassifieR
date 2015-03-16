@@ -84,6 +84,7 @@
 }
 
 ## ** Gradient descent trainers: C Backend
+##' @useDynLib gpuClassifieR, .registration=TRUE
 .train_gd_C <-  function(object, feats, targets, decay=NULL, step_size=NULL,
                         max_iter=NULL, verbose=FALSE, tol=1e-6, ...) {
 
@@ -104,6 +105,7 @@
 }
 
 ## ** Gradient descent trainers: CUDA Backend
+##' @useDynLib gpuClassifieR, .registration=TRUE
 .train_gd_CUDA <-  function(object, feats, targets, decay=NULL, step_size=NULL,
                             max_iter=NULL, verbose=FALSE, tol=1e-6, ...) {
     weights <- coef(object)

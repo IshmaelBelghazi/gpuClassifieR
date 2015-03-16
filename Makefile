@@ -1,5 +1,5 @@
 ##################################################
-# R C/CUDA extension Makefile 0.0                #
+# R C/CUDA extension Makefile 0.1.0              #
 # -------------------------------                #
 # Author: Mohamed Ishmael Diwan Belghazi (2015)  #
 # Email:  ishmael.belghazi@gmail.com             #
@@ -12,7 +12,7 @@
 # defined in SOURCES to shared libs              #
 # make clean: to clean all intermediate files    #
 # make diagnostic: to print diagnostic screen    #
-# make SOURCES=foo.c bar.c: to compile to pass   #
+# make SOURCES=foo.c bar.c: to pass              #
 # file names for compilation and linking         #
 ##################################################
 
@@ -69,11 +69,11 @@ BLAS_LIBS=$(call getconf, BLAS_LIBS)
 
 ## * Defining Sources, Dependencies, and Targets
 ## ?= Defines if not already defined in the environement.
-SOURCES?=get_cond_prob.c logreg.c get_error.c get_grad_update.c train.c
+SOURCES?=
 OBJECTS=$(SOURCES:.c=.o)
 #OBJECTS=get_cond_prob.o logreg.o
 TARGETS=$(SOURCES:.c=$(SHLIB_EXT))
-TARGETS=logreg_fun_C.so
+TARGETS=
 ## * Defining Makefile
 ## ** Build processes
 ## Defining Build
@@ -172,6 +172,11 @@ check/examples: document
 	@echo "devtools::run_examples()" | $(R_COMMAND)
 check:
 	@echo "devtools::check(check_dir='./checks/')" | $(R_COMMAND)
+## ** debug
+valgrind:
+	R -d valgrind --vanilla < test_custom
+cudamemcheck:
+	cuda-memcheck ./test_custom
 ## ** Lint
 ## *** R lint
 lint/R:

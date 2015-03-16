@@ -15,7 +15,7 @@
 // Registering .Call entry points. We use native registration to lower call
 // overhead as much as possible.
 #define CALLDEF(name, n) {#name, (DL_FUNC) &name, n} // '#' is the preprocessor
-// tringizing operator
+// stringizing operator
 static const R_CallMethodDef callMethods[] = {
   // C functions
   CALLDEF(get_condprob_logreg_, 4),
@@ -32,7 +32,7 @@ static const R_CallMethodDef callMethods[] = {
 
 // Controlling visibility with 'attribute_visible'. Note that the mechanism is
 // not avaiable on windows. See: ./cudaLogReg-win.def.
-void attribute_visible R_init_cudaLogReg(DllInfo * info) {
+void attribute_visible R_init_gpuClassifieR(DllInfo * info) {
   R_registerRoutines(info, NULL, callMethods, NULL, NULL);
   // R_useDynamicSymbols(info, FALSE);
   // R_forceSymbols(info, TRUE);

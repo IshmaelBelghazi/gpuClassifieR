@@ -1,5 +1,5 @@
 ## * Class conditional probabilities
-##' @useDynLib cudaLogReg, .registration=TRUE
+##' @useDynLib gpuClassifieR, .registration=TRUE
 .get_condprob <- function(feats, weights, normalize=TRUE,
                                 log_domain=FALSE, backend='R') {
 
@@ -33,7 +33,7 @@
     return(condprob)
 }
 ## * Cost
-##' @useDynLib cudaLogReg, .registration=TRUE
+##' @useDynLib gpuClassifieR, .registration=TRUE
 .get_cost <- function(feats, weights, targets, decay=0.0, backend='R') {
 
 
@@ -62,7 +62,7 @@
 }
 
 ## * Cost gradient
-##' @useDynLib cudaLogReg, .registration=TRUE
+##' @useDynLib gpuClassifieR, .registration=TRUE
 .get_grad <- function(feats, weights, targets, decay=0.0, backend='R') {
 
     switch(backend,

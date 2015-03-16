@@ -3,7 +3,7 @@
 #' This packages implements a linear classifier with a batch gradient descent trainer.
 #' Three backend are offered: R, C, and CUDA.
 #'
-#' @name cudaLogReg
+#' @name gpuClassifieR
 #' @docType package
 NULL
 
