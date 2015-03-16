@@ -110,7 +110,7 @@ benchmark_fun <- function(n_sample, feats, targets) {
 ## Running the benchmark
 We combine the training and test sets to get 2000 points. We then time each training and repeatedly increment training examples count by 100 up to 2000.
 
-```{r, echo=FALSE}
+```{r, echo=FALSE, eval=FALSE}
 feats <- rbind(train_feats, test_feats)
 targets <- rbind(train_targets, test_targets)
 
