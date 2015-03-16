@@ -31,7 +31,7 @@ static const R_CallMethodDef callMethods[] = {
 };
 
 // Controlling visibility with 'attribute_visible'. Note that the mechanism is
-// not avaiable on windows. See: ./cudaLogReg-win.def.
+// not avaiable on windows. See: ./gpuClassifieR-win.def.
 void attribute_visible R_init_gpuClassifieR(DllInfo * info) {
   R_registerRoutines(info, NULL, callMethods, NULL, NULL);
   // R_useDynamicSymbols(info, FALSE);

@@ -1,4 +1,4 @@
 library(testthat)
-library(cudaLogReg)
+library(gpuClassifieR)
 
-test_check("cudaLogReg")
+test_check("gpuClassifieR")
