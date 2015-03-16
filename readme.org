@@ -1,3 +1,3 @@
-#+TITLE: CudaLogReg - C/CUDA Linear Classifier for R
+#+TITLE: gpuClassifieR - C/CUDA Linear Classifier for R
 #+AUTHOR: Mohamed Ishmael Diwan Belghazi
 #+EMAIL: ishmael.belghazi@ipsolcapital.com

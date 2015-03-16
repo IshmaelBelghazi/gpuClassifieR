@@ -1,6 +1,6 @@
-Package: cudaLogReg
-Title: Cuda parallel Logistic Regression
-Version: 0.1.0
+Package: gpuClassifier
+Title: gpuClassifieR C/CUDA linear classifier for R
+Version: 0.1.3
 Authors@R: person("Mohamed Ishmael Belghazi", "Belghazi", , "ishmael.belghazi@gmail.com", role = c("aut", "cre"))
 Description: Cuda parallel Logistic Regression
 Depends: R (>= 3.1.2)

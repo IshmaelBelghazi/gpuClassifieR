@@ -12,10 +12,11 @@ get_error(object, feats, targets, backend = "R")
 \arguments{
 \item{object}{Linear classifier specification object.}
 
-\item{feats}{Numeric matrix. Features to predict. Dimensionality should be consistent with
-that of the model.}
+\item{feats}{Numeric matrix. Features to predict. Dimensionality
+should be consistent with that of the model.}
 
-\item{targets}{Numeric matrix. TRUE targets to compare prediction against. Dimensionality
+\item{targets}{Numeric matrix. TRUE targets to compare prediction against.
+Dimensionality
 should be consistent with that of the model. Should always be one-hot encoded.}
 
 \item{backend}{Computation back-end ('R', 'C', or 'CUDA')}

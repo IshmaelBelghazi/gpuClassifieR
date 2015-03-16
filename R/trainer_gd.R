@@ -1,6 +1,7 @@
 ## * Gradient descent trainer
-.train_gd <- function(object, feats, targets, decay=NULL, step_size=NULL, max_iter=NULL,
-                      verbose=FALSE, tol=1e-6, backend="R", ...) {
+.train_gd <- function(object, feats, targets, decay=NULL, step_size=NULL,
+                      max_iter=NULL, verbose=FALSE, tol=1e-6,
+                      backend="R", ...) {
 
     ## Features should be N X M. Targets should be N X K
     stopifnot(NROW(feats) == NROW(targets))
@@ -105,7 +106,6 @@
 ## ** Gradient descent trainers: CUDA Backend
 .train_gd_CUDA <-  function(object, feats, targets, decay=NULL, step_size=NULL,
                             max_iter=NULL, verbose=FALSE, tol=1e-6, ...) {
-
     weights <- coef(object)
     results <- .Call("train_gd_cuda", as.matrix(feats),
                      t(as.matrix(weights)),

@@ -154,6 +154,8 @@ reload:
 ## ** Documentation update
 document:
 	@echo "devtools::document()" | $(R_COMMAND)
+build/vignette:
+	@echo "devtools::build_vignettes()" | $(R_COMMAND)
 ## ** Tests
 test/custom:
 	@printf "%s\n" "Running test..."
@@ -170,5 +172,9 @@ check/examples: document
 	@echo "devtools::run_examples()" | $(R_COMMAND)
 check:
 	@echo "devtools::check(check_dir='./checks/')" | $(R_COMMAND)
+## ** Lint
+## *** R lint
+lint/R:
+	@echo "devtools::lint()"
 ## ** Misc config
 .PHONY: all clean rebuild test test/all diagnostic

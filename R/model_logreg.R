@@ -9,7 +9,7 @@
                ## Normalizing probabilities
                if (normalize) {
                    condprob <- t(apply(condprob, 1,
-                                       FUN = function(feats) feats - .logsumexp_R(feats)))
+                                       function(feats) feats - .logsumexp_R(feats)))
                }
                if (!log_domain) condprob <- exp(condprob)
            },
@@ -28,7 +28,7 @@
                                    as.logical(log_domain)))
            },
        {
-           stop('unrocognized computation bckend')
+           stop('unrecognized computation bckend')
        })
     return(condprob)
 }
@@ -39,7 +39,8 @@
 
     switch(backend,
            R={
-               log_prob <- .get_condprob(feats, weights, log_domain=TRUE, backend='R')
+               log_prob <- .get_condprob(feats, weights, log_domain=TRUE,
+                                         backend='R')
                cost <- -mean(log_prob * targets) + 0.5 * decay * sum(weights^2)
            },
            'C'={
@@ -66,7 +67,8 @@
 
     switch(backend,
            R={
-               prob <- .get_condprob(feats, weights, log_domain=FALSE, backend='R')
+               prob <- .get_condprob(feats, weights, log_domain=FALSE,
+                                     backend='R')
                grad <-  (t(feats) %*% (prob - targets)) + decay * weights
            },
            C={

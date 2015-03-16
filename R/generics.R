@@ -81,13 +81,15 @@ get_cost <- function(object, feats, targets, decay=NULL, backend='R', ...){
     UseMethod('get_cost')
 }
 ##' @export
-get_cost.default <-  function(object, feats, targets, decay=NULL, backend='R', ...) {
+get_cost.default <-  function(object, feats, targets,
+                              decay=NULL, backend='R', ...) {
     stop('unknown object class')
 }
 ##' @describeIn get_cost Computers model cost for linear classification
 ##' specification objects
 ##' @export
-get_cost.model.spec <- function(object, feats, targets, decay=NULL, backend='R', ...) {
+get_cost.model.spec <- function(object, feats, targets,
+                                decay=NULL, backend='R', ...) {
     object$cost_fun(feats, coef(object), targets, decay, backend)
 }
 ## ** Class conditional probabilities getter
@@ -154,9 +156,10 @@ predict.model.spec <- function(object, newfeats, backend='R', ...) {
 ##' Computes model misclassification rate
 ##'
 ##' @param object Linear classifier specification object.
-##' @param feats Numeric matrix. Features to predict. Dimensionality should be consistent with
-##' that of the model.
-##' @param targets Numeric matrix. TRUE targets to compare prediction against. Dimensionality
+##' @param feats Numeric matrix. Features to predict. Dimensionality
+##' should be consistent with that of the model.
+##' @param targets Numeric matrix. TRUE targets to compare prediction against.
+##' Dimensionality
 ##' should be consistent with that of the model. Should always be one-hot encoded.
 ##' @param backend Computation back-end ('R', 'C', or 'CUDA')
 ##' @return Numeric scalar. Misclassification rate. Percentage of wrong predictions.

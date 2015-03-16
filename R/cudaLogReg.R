@@ -1,4 +1,4 @@
-#' cudaLogReg: a GPU linear classfier for R
+#' gpuClassieR: a GPU linear classfier for R
 #'
 #' This packages implements a linear classifier with a batch gradient descent trainer.
 #' Three backend are offered: R, C, and CUDA.
