@@ -26,9 +26,7 @@ Moreover, to ensure the robustness of the package:
 
 MNIST is a collection of handwritten digits, in matrix form, along with their corresponding labels. It is, or actually was, the standard dataset for benchmarking classification algorithms. The package contains a subset of MNIST creatively called mini-MNIST.
 Let us fit and asses gpuClassifierR performances using mini-MNIST.
-```{r, include=FALSE}
-devtools::load_all()
-```
+
 ## Loading data
 Let us first load and organize the dataset
 ```{r, results="hide"}
