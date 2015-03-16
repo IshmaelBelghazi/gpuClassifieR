@@ -1,30 +1,6 @@
-## * Generics
-##' Gradient Descent trainer generic
-##'
-##' @param object model.spec object
-##' @param feats features (N X M)
-##' @param targets targets (N X K)
-##' @param decay L2 regularisation coefficient
-##' @param step_size gradient descent step size
-##' @param max_iter Maximum iteration
-##' @param verbose prints output
-##' @param tol assume convergence when norm of gradient is smaller than tol
-##' @param backend Computation backend ("R", "C", or "CUDA")
-##' @param ... any other passthrough parameters
-##' @return model.spec object
-##' @author Mohamed Ishmael Diwan Belghazi
-train <- function(object, feats, targets, decay=NULL, step_size=NULL, max_iter=NULL,
-                  verbose=FALSE, tol=1e-6, backend="R", ...) {
-    UseMethod("train")
-}
-
-train.default <- function(object, feats, targets, decay=NULL, step_size=NULL, max_iter=NULL,
-                  verbose=FALSE, tol=1e-6, backend="R", ...) {
-    stop("unkown object class")
-}
-##' @describeIn train Gradient descent trainer
-train.model.spec <- function(object, feats, targets, decay=NULL, step_size=NULL, max_iter=NULL,
-                             verbose=FALSE, tol=1e-6, backend="R", ...) {
+## * Gradient descent trainer
+.train_gd <- function(object, feats, targets, decay=NULL, step_size=NULL, max_iter=NULL,
+                      verbose=FALSE, tol=1e-6, backend="R", ...) {
 
     ## Features should be N X M. Targets should be N X K
     stopifnot(NROW(feats) == NROW(targets))
@@ -53,27 +29,27 @@ train.model.spec <- function(object, feats, targets, decay=NULL, step_size=NULL,
     switch(backend,
            "R"={
                message("R backend")
-               do.call("train_gd_R", as.list(match.call())[-1])
+               do.call(".train_gd_R", as.list(match.call())[-1])
            },
            "C"={
                message("C backend")
-               do.call("train_gd_C", as.list(match.call())[-1])
+               do.call(".train_gd_C", as.list(match.call())[-1])
 
            },
            "CUDA"={
                message("CUDA backend")
-               do.call("train_gd_CUDA", as.list(match.call())[-1])
+               do.call(".train_gd_CUDA", as.list(match.call())[-1])
            },
        {
            stop("unrecognized computation backend")
        })
 }
 
-## * Gradient descent trainers
+## * Gradient descent trainers backends
 ## ** Gradient descent trainers: R Backend
 
-train_gd_R <- function(object, feats, targets, decay=NULL , step_size=NULL, max_iter=NULL,
-                       verbose=FALSE, tol=1e-6, ...) {
+.train_gd_R <- function(object, feats, targets, decay=NULL , step_size=NULL,
+                        max_iter=NULL, verbose=FALSE, tol=1e-6, ...) {
 
     ## TODO(Ishmael): Add passthrough option for computation backend
     backend <- "R"
@@ -107,7 +83,7 @@ train_gd_R <- function(object, feats, targets, decay=NULL , step_size=NULL, max_
 }
 
 ## ** Gradient descent trainers: C Backend
-train_gd_C <-  function(object, feats, targets, decay=NULL, step_size=NULL,
+.train_gd_C <-  function(object, feats, targets, decay=NULL, step_size=NULL,
                         max_iter=NULL, verbose=FALSE, tol=1e-6, ...) {
 
     weights <- coef(object)
@@ -127,8 +103,8 @@ train_gd_C <-  function(object, feats, targets, decay=NULL, step_size=NULL,
 }
 
 ## ** Gradient descent trainers: CUDA Backend
-train_gd_CUDA <-  function(object, feats, targets, decay=NULL, step_size=NULL,
-                           max_iter=NULL, verbose=FALSE, tol=1e-6, ...) {
+.train_gd_CUDA <-  function(object, feats, targets, decay=NULL, step_size=NULL,
+                            max_iter=NULL, verbose=FALSE, tol=1e-6, ...) {
 
     weights <- coef(object)
     results <- .Call("train_gd_cuda", as.matrix(feats),

@@ -2,7 +2,7 @@
 
 rm(list=ls())
 ## * Package setup
-library(methods, quietly=TRUE) ## hasArgs is not loaded by default by Rscript
+library(methods, quietly=TRUE)  ## hasArgs is not loaded by default by Rscript
 library(devtools, quietly=TRUE)
 pkg_path <-  "."
 try(unload(pkg_path))
@@ -31,7 +31,7 @@ model <- LogReg(weights_init=weights_init)
 max_iter <- 100
 decay <- 0
 step_size <- 0.01
-verbose <- TRUE
+verbose <- FALSE
 tol <- 1e-6
 backend <- "R"
 ## ** Training model
@@ -42,5 +42,5 @@ mis_is <- get_error(model, feats, targets, backend)
 mis_oos <- get_error(model, feats_oos, targets_oos, backend)
 print("model in sample misclassification rate")
 print(mis_is)
-print("model out of sample misclassificationb rate")
+print("model out of sample misclassification rate")
 print(mis_oos)

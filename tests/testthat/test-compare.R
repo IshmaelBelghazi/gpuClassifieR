@@ -22,35 +22,35 @@ test_that("Conditional probabilties R/C/CUDA", {
     normalize <- TRUE
     log_domain <- as.logical(rbinom(1, 1, 0.5))
 
-    expect_equal(get_condprob_logreg(feats, weights, normalize, log_domain, backend="R"),
-                 get_condprob_logreg(feats, weights, normalize, log_domain, backend="C"),
+    expect_equal(.get_condprob(feats, weights, normalize, log_domain, backend="R"),
+                 .get_condprob(feats, weights, normalize, log_domain, backend="C"),
                  tolerance=tol,
                  scale=1)
-    expect_equal(get_condprob_logreg(feats, weights, normalize, log_domain, backend="R"),
-                 get_condprob_logreg(feats, weights, normalize, log_domain, backend="CUDA"),
+    expect_equal(.get_condprob(feats, weights, normalize, log_domain, backend="R"),
+                 .get_condprob(feats, weights, normalize, log_domain, backend="CUDA"),
                  tolerance=tol,
                  scale=1)
 })
 
 ##---------------------------------------
 test_that("Cross-entropies R/C/CUDA", {
-    expect_equal(get_cost_logreg(feats, weights, targets, decay, backend="R"),
-                 get_cost_logreg(feats, weights, targets, decay, backend="C"),
+    expect_equal(.get_cost(feats, weights, targets, decay, backend="R"),
+                 .get_cost(feats, weights, targets, decay, backend="C"),
                  tolerance=tol,
                  scale=1)
-    expect_equal(get_cost_logreg(feats, weights, targets, decay, backend="R"),
-                 get_cost_logreg(feats, weights, targets, decay, backend="CUDA"),
+    expect_equal(.get_cost(feats, weights, targets, decay, backend="R"),
+                 .get_cost(feats, weights, targets, decay, backend="CUDA"),
                  tolerance=tol,
                  scale=1)
 })
 ##---------------------------------------
 test_that("gradient R/C/CUDA", {
-    expect_equal(get_grad_logreg(feats, weights, targets, decay, backend="R"),
-                 get_grad_logreg(feats, weights, targets, decay, backend="C"),
+    expect_equal(.get_grad(feats, weights, targets, decay, backend="R"),
+                 .get_grad(feats, weights, targets, decay, backend="C"),
                  tolerance=tol,
                  scale=1)
-    expect_equal(get_grad_logreg(feats, weights, targets, decay, backend="R"),
-                 get_grad_logreg(feats, weights, targets, decay, backend="CUDA"),
+    expect_equal(.get_grad(feats, weights, targets, decay, backend="R"),
+                 .get_grad(feats, weights, targets, decay, backend="CUDA"),
                  tolerance=tol,
                  scale=1)
 })

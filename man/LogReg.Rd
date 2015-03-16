@@ -13,7 +13,7 @@ LogReg(weights_init = NULL)
 model.spec object
 }
 \description{
-Logistic regression model specification
+Linear Classifier specification constructor
 }
 \author{
 Mohamed Ishmael Diwan Belghazi

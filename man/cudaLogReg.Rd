@@ -6,7 +6,7 @@
 \alias{cudaLogReg-package}
 \title{cudaLogReg: a GPU linear classfier for R}
 \description{
-This package implements a logistic regression with a batch gradient trainer.
-Three backend are offered: R, C (BLAS), and CUDA
+This packages implements a linear classifier with a batch gradient descent trainer.
+Three backend are offered: R, C(BLAS), and CUDA.
 }
 

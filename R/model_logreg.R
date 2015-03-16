@@ -1,6 +1,6 @@
 ## * Class conditional probabilities
 ##' @useDynLib cudaLogReg, .registration=TRUE
-get_condprob_logreg <- function(feats, weights, normalize=TRUE,
+.get_condprob <- function(feats, weights, normalize=TRUE,
                                 log_domain=FALSE, backend="R") {
 
     switch(backend,
@@ -9,7 +9,7 @@ get_condprob_logreg <- function(feats, weights, normalize=TRUE,
                ## Normalizing probabilities
                if (normalize) {
                    condprob <- t(apply(condprob, 1,
-                                       FUN = function(feats) feats - logsumexp_R(feats)))
+                                       FUN = function(feats) feats - .logsumexp_R(feats)))
                }
                if (!log_domain) condprob <- exp(condprob)
            },
@@ -34,12 +34,12 @@ get_condprob_logreg <- function(feats, weights, normalize=TRUE,
 }
 ## * Cost
 ##' @useDynLib cudaLogReg, .registration=TRUE
-get_cost_logreg <- function(feats, weights, targets, decay=0.0, backend="R") {
+.get_cost <- function(feats, weights, targets, decay=0.0, backend="R") {
 
 
     switch(backend,
            "R"={
-               log_prob <- get_condprob_logreg(feats, weights, log_domain=TRUE, backend="R")
+               log_prob <- .get_condprob(feats, weights, log_domain=TRUE, backend="R")
                cost <- -mean(log_prob * targets) + 0.5 * decay * sum(weights^2)
            },
            "C"={
@@ -62,11 +62,11 @@ get_cost_logreg <- function(feats, weights, targets, decay=0.0, backend="R") {
 
 ## * Cost gradient
 ##' @useDynLib cudaLogReg, .registration=TRUE
-get_grad_logreg <- function(feats, weights, targets, decay=0.0, backend = "R") {
+.get_grad <- function(feats, weights, targets, decay=0.0, backend = "R") {
 
     switch(backend,
            "R"={
-               prob <- get_condprob_logreg(feats, weights, log_domain=FALSE, backend="R")
+               prob <- .get_condprob(feats, weights, log_domain=FALSE, backend="R")
                grad <-  (t(feats) %*% (prob - targets)) + decay * weights
            },
            "C"={
@@ -88,8 +88,31 @@ get_grad_logreg <- function(feats, weights, targets, decay=0.0, backend = "R") {
        })
     return(grad)
 }
+
+## * Prediction
+.predict_class <- function(condprob, backend="R") {
+    switch(backend,
+           R={
+               predictions <- mat.or.vec(NROW(condprob), NCOL(condprob))
+               max_idx <- max.col(condprob, ties.method = "first")
+               mapply(function(i, j) predictions[i, j] <<- 1.0,
+                      1:NROW(condprob), max_idx)
+           },
+           C={
+               stop(paste(backend," backend function not implemented"))
+           },
+           CUDA={
+               stop(paste(backend," backend function not implemented"))
+           },
+       {
+           stop("unrecognized computation backend")
+       })
+
+        return(predictions)
+}
+
 ## * Misclassification rate
-get_error_logreg <- function(predictions, targets, backend="R") {
+.get_error <- function(predictions, targets, backend="R") {
 
     switch(backend,
            R={
@@ -105,25 +128,4 @@ get_error_logreg <- function(predictions, targets, backend="R") {
            stop("unrecognized computation backend")
        })
     return(mis_rate)
-}
-
-predict_class_logreg <- function(condprob, backend="R") {
-    switch(backend,
-           R={
-               predictions <- mat.or.vec(NROW(condprob), NCOL(condprob))
-               max_idx <- max.col(condprob, ties.method = "first")
-               mapply(function(i, j) predictions[i, j] <<- 1.0,
-                      1:NROW(condprob), max_idx)
-           },
-           C={
-               stop(paste(backend," not implemented"))
-           },
-           CUDA={
-               stop(paste(backend," not implemented"))
-           },
-       {
-           stop("unrecognized computation backend")
-       })
-
-        return(predictions)
 }

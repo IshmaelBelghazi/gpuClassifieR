@@ -3,13 +3,16 @@
 \docType{data}
 \name{mini_mnist}
 \alias{mini_mnist}
-\title{Mini-mnist}
-\format{list of list of images and labels matrices}
+\title{Subset of MNIST}
+\format{2 Matrices of 1000 rows and 784 columns for train and test images
+and 2 matrices of 1000 rows and 10 columns for the train and test targets
+(in onehot encoding).}
 \usage{
 data(mini_mnist)
 }
 \description{
-A dataset containing train and test Mnist images and labels
+A dataset containing a subset of thr MNIST database. The MNIST databse is a
+large collection of handwritten digits.
 }
 \keyword{datasets}
 
