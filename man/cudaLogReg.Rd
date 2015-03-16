@@ -7,6 +7,6 @@
 \title{cudaLogReg: a GPU linear classfier for R}
 \description{
 This packages implements a linear classifier with a batch gradient descent trainer.
-Three backend are offered: R, C(BLAS), and CUDA.
+Three backend are offered: R, C, and CUDA.
 }
 

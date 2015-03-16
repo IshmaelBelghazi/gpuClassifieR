@@ -3,7 +3,7 @@
 \name{get_cost}
 \alias{get_cost}
 \alias{get_cost.model.spec}
-\title{Model cost accessor generic}
+\title{Computes model cost}
 \usage{
 get_cost(object, feats, targets, decay = NULL, backend = "R", ...)
 
@@ -11,28 +11,49 @@ get_cost(object, feats, targets, decay = NULL, backend = "R", ...)
   backend = "R", ...)
 }
 \arguments{
-\item{object}{object of class model.spec}
+\item{object}{Linear classifier specification object.}
 
-\item{feats}{Matrix of features (N X M)}
+\item{feats}{Numeric Matrix of features. Follows the usual convention of having
+one example per row. For a model with M features and dataset with N
+examples the matrix should be N \eqn{\times} K}
 
-\item{targets}{matrix of one hot encoded target (N X K)}
+\item{targets}{Numeric matrix of one hot encoded target. Follows the usual
+convention of having one target per row. For a model with K classes and a
+dataset with N examples the matrix should be N \eqn{\times} K}
 
-\item{decay}{L2 regularisation decay}
+\item{decay}{Numeric scalar. Tikhonov regularization coefficient (weight decay). Should be
+a non-negative real number.}
 
-\item{backend}{Computation backend ("R", "C", or "CUDA")}
+\item{backend}{Computation back-end ('R', 'C', or 'CUDA')}
 
-\item{...}{Pass through parameters}
+\item{...}{other arguments passed to specific methods}
 }
 \value{
-cost (M X K)
+cost Numeric scalar. model cost
 }
 \description{
-Model cost accessor generic
+Computes model cost
 }
 \section{Methods (by class)}{
 \itemize{
-\item \code{model.spec}: Model cost accessor
+\item \code{model.spec}: Computers model cost for linear classification
+specification objects
 }}
+\examples{
+# Generate random initial weights
+w_init <- matrix(rnorm(784 * 10), 784, 10)
+# construct model
+linear_classifier <- Classifier(weights_init=w_init)
+# Fetch training variables
+feats <- mini_mnist$train$images
+targets <- mini_mnist$train$labels
+# Set decay coefficient
+decay <- 0.01
+# compute cost of the training set using the three back-ends
+cost_R <- get_cost(linear_classifier, feats, targets, decay, 'R')
+cost_C <- get_cost(linear_classifier, feats, targets, decay, 'C')
+cost_CUDA <- get_cost(linear_classifier, feats, targets, decay, 'CUDA')
+}
 \author{
 Mohamed Ishmael Diwan Belghazi
 }

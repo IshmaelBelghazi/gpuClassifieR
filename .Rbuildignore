@@ -2,3 +2,4 @@
 ^.*\~$
 Makefile
 test_custom
+checks/

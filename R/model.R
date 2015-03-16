@@ -2,11 +2,18 @@
 
 ##' Linear Classifier specification constructor
 ##'
-##' @title Logistic regression model specification
 ##' @param weights_init initial weights.
 ##' @return model.spec object
 ##' @author Mohamed Ishmael Diwan Belghazi
-LogReg <- function(weights_init=NULL) {
+##' @export
+##' @examples
+##'
+##' # generate initial weight matrix for a linear classifier with 10 classes
+##' # and 784 features
+##' w_init <- matrix(, 784, 10)
+##' # Construct model
+##' linear_classifier <- Classifier(weights_init=w_init)
+Classifier <- function(weights_init=NULL) {
 
     if(is.null(weights_init))
         stop("initial weights specification is mandatory to set problem dimensions")

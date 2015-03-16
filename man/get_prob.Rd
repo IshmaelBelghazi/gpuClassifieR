@@ -3,7 +3,7 @@
 \name{get_prob}
 \alias{get_prob}
 \alias{get_prob.model.spec}
-\title{Class conditional probabilities getter generic}
+\title{Computes model class conditional probabilities}
 \usage{
 get_prob(object, feats, normalize = TRUE, log_domain = FALSE,
   backend = "R", ...)
@@ -12,28 +12,48 @@ get_prob(object, feats, normalize = TRUE, log_domain = FALSE,
   log_domain = FALSE, backend = "R", ...)
 }
 \arguments{
-\item{object}{Object of class model.spec}
+\item{object}{Linear classifier specification object.}
 
-\item{feats}{features (N X M)}
+\item{feats}{Numeric Matrix of features. Follows the usual convention of having
+one example per row. For a model with M features and dataset with N
+examples the matrix should be N \eqn{\times} K}
 
-\item{normalize}{normalize probabilities}
+\item{normalize}{Logical scalar. If TRUE return normalized probabilities}
 
-\item{log_domain}{return log probabilities}
+\item{log_domain}{Logical scalar. If TRUE returns log probabilities.}
 
-\item{backend}{Computation backend ("R", "C", or "CUDA")}
+\item{backend}{Computation back-end ('R', 'C', or 'CUDA')}
 
-\item{...}{Pass through parameters}
+\item{...}{other arguments passed to specific methods}
 }
 \value{
-Class conditional probabilities
+Numeric Matrix. Class conditional probabilities matrix. Each row corresponds to the
+probabilities of one example. For model with K classes and a dataset of N
+examples the returned matrix should be N \eqn{\times} K
 }
 \description{
-Class conditional probabilities getter generic
+Computes model class conditional probabilities
 }
 \section{Methods (by class)}{
 \itemize{
-\item \code{model.spec}: Class conditional probabilities getter
+\item \code{model.spec}: Computes model class conditional probabilities for
+linear classifier specification objects
 }}
+\examples{
+# Generate random initial weights
+w_init <- matrix(rnorm(784 * 10), 784, 10)
+# construct model
+linear_classifier <- Classifier(weights_init=w_init)
+# Fetch training variables
+feats <- mini_mnist$train$images
+targets <- mini_mnist$train$labels
+# Set decay coefficient
+decay <- 0.01
+# compute log probabilities of the training set using the three back-ends
+log_prob_R <- get_prob(linear_classifier, feats, TRUE, TRUE, 'R')
+log_prob_C <- get_prob(linear_classifier, feats, TRUE, TRUE, 'C')
+log_prob_CUDA <- get_prob(linear_classifier, feats, TRUE, TRUE, 'CUDA')
+}
 \author{
 Mohamed Ishmael Diwan Belghazi
 }

@@ -3,7 +3,7 @@
 \name{get_grad}
 \alias{get_grad}
 \alias{get_grad.model.spec}
-\title{Model gradient accessor generic}
+\title{Computes model gradient}
 \usage{
 get_grad(object, feats, targets, decay = NULL, backend = "R", ...)
 
@@ -11,28 +11,51 @@ get_grad(object, feats, targets, decay = NULL, backend = "R", ...)
   backend = "R", ...)
 }
 \arguments{
-\item{object}{object of class model.spec}
+\item{object}{Linear classifier specification object.}
 
-\item{feats}{Matrix of features (N X M)}
+\item{feats}{Numeric Matrix of features. Follows the usual convention of having
+one example per row. For a model with M features and dataset with N
+examples the matrix should be N \eqn{\times} K}
 
-\item{targets}{matrix of one hot encoded target (N X K)}
+\item{targets}{Numeric matrix of one hot encoded target. Follows the usual
+convention of having one target per row. For a model with K classes and a
+dataset with N examples the matrix should be N \eqn{\times} K}
 
-\item{decay}{L2 regularisation decay}
+\item{decay}{Numeric scalar. Tikhonov regularization coefficient (weight decay). Should be
+a non-negative real number.}
 
-\item{backend}{Computation backend ("R", "C", or "CUDA")}
+\item{backend}{Computation back-end ('R', 'C', or 'CUDA')}
 
-\item{...}{Pass through parameters}
+\item{...}{other arguments passed to specific methods}
 }
 \value{
-gradient (M X K)
+Numeric Matrix of gradients. One for each class. Gradient are arrayed in
+columns. For a model with M features and K classes the matrix should be M
+\eqn{\times} K
 }
 \description{
-Model gradient accessor generic
+Computes model gradient
 }
 \section{Methods (by class)}{
 \itemize{
-\item \code{model.spec}: Model gradient accessor
+\item \code{model.spec}: Computes model gradient for linear classifier
+specification objects
 }}
+\examples{
+# Generate random initial weights
+w_init <- matrix(rnorm(784 * 10), 784, 10)
+# construct model
+linear_classifier <- Classifier(weights_init=w_init)
+# Fetch training variables
+feats <- mini_mnist$train$images
+targets <- mini_mnist$train$labels
+# Set decay coefficient
+decay <- 0.01
+# compute gradient at the training set using the three back-ends
+gradient_R <- get_grad(linear_classifier, feats, targets, decay, 'R')
+gradient_C <- get_grad(linear_classifier, feats, targets, decay, 'C')
+gradient_CUDA <- get_grad(linear_classifier, feats, targets, decay, 'CUDA')
+}
 \author{
 Mohamed Ishmael Diwan Belghazi
 }

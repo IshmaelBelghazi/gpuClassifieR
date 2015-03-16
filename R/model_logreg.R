@@ -1,10 +1,10 @@
 ## * Class conditional probabilities
 ##' @useDynLib cudaLogReg, .registration=TRUE
 .get_condprob <- function(feats, weights, normalize=TRUE,
-                                log_domain=FALSE, backend="R") {
+                                log_domain=FALSE, backend='R') {
 
     switch(backend,
-           "R"={
+           R={
                condprob <- feats %*% weights
                ## Normalizing probabilities
                if (normalize) {
@@ -13,119 +13,119 @@
                }
                if (!log_domain) condprob <- exp(condprob)
            },
-           "C"={
-               condprob <- t(.Call("get_condprob_logreg_",
+           C={
+               condprob <- t(.Call('get_condprob_logreg_',
                                    as.matrix(feats),
                                    t(weights),
                                    as.logical(normalize),
                                    as.logical(log_domain)))
            },
-           "CUDA"={
-               condprob <- t(.Call("get_condprob_logreg_cuda",
+           CUDA={
+               condprob <- t(.Call('get_condprob_logreg_cuda',
                                    as.matrix(feats),
                                    t(weights),
                                    as.logical(normalize),
                                    as.logical(log_domain)))
            },
        {
-           stop("unrocognized computation bckend")
+           stop('unrocognized computation bckend')
        })
     return(condprob)
 }
 ## * Cost
 ##' @useDynLib cudaLogReg, .registration=TRUE
-.get_cost <- function(feats, weights, targets, decay=0.0, backend="R") {
+.get_cost <- function(feats, weights, targets, decay=0.0, backend='R') {
 
 
     switch(backend,
-           "R"={
-               log_prob <- .get_condprob(feats, weights, log_domain=TRUE, backend="R")
+           R={
+               log_prob <- .get_condprob(feats, weights, log_domain=TRUE, backend='R')
                cost <- -mean(log_prob * targets) + 0.5 * decay * sum(weights^2)
            },
-           "C"={
-               cost <- .Call("get_cost_logreg_", as.matrix(feats),
+           'C'={
+               cost <- .Call('get_cost_logreg_', as.matrix(feats),
                              t(as.matrix(weights)),
                              t(as.matrix(targets)),
                              as.double(decay))
            },
-           "CUDA"={
-               cost <- .Call("get_cost_logreg_cuda", as.matrix(feats),
+           CUDA={
+               cost <- .Call('get_cost_logreg_cuda', as.matrix(feats),
                              t(as.matrix(weights)),
                              t(as.matrix(targets)),
                              as.double(decay))
            },
        {
-           stop("unrecognized computation backend")
+           stop('unrecognized computation backend')
        })
     return(cost)
 }
 
 ## * Cost gradient
 ##' @useDynLib cudaLogReg, .registration=TRUE
-.get_grad <- function(feats, weights, targets, decay=0.0, backend = "R") {
+.get_grad <- function(feats, weights, targets, decay=0.0, backend='R') {
 
     switch(backend,
-           "R"={
-               prob <- .get_condprob(feats, weights, log_domain=FALSE, backend="R")
+           R={
+               prob <- .get_condprob(feats, weights, log_domain=FALSE, backend='R')
                grad <-  (t(feats) %*% (prob - targets)) + decay * weights
            },
-           "C"={
-               grad <- t(.Call("get_grad_logreg_",
+           C={
+               grad <- t(.Call('get_grad_logreg_',
                                as.matrix(feats),
                                t(as.matrix(weights)),
                                t(as.matrix(targets)),
                                as.double(decay)))
            },
-           "CUDA"={
-               grad <- t(.Call("get_grad_logreg_cuda",
+           CUDA={
+               grad <- t(.Call('get_grad_logreg_cuda',
                                as.matrix(feats),
                                t(as.matrix(weights)),
                                t(as.matrix(targets)),
                                as.double(decay)))
            },
        {
-           stop("unrecognized computation backend")
+           stop('unrecognized computation backend')
        })
     return(grad)
 }
 
 ## * Prediction
-.predict_class <- function(condprob, backend="R") {
+.predict_class <- function(condprob, backend='R') {
     switch(backend,
            R={
                predictions <- mat.or.vec(NROW(condprob), NCOL(condprob))
-               max_idx <- max.col(condprob, ties.method = "first")
+               max_idx <- max.col(condprob, ties.method = 'first')
                mapply(function(i, j) predictions[i, j] <<- 1.0,
                       1:NROW(condprob), max_idx)
            },
            C={
-               stop(paste(backend," backend function not implemented"))
+               stop(paste(backend,' backend function not implemented'))
            },
            CUDA={
-               stop(paste(backend," backend function not implemented"))
+               stop(paste(backend,' backend function not implemented'))
            },
        {
-           stop("unrecognized computation backend")
+           stop('unrecognized computation backend')
        })
 
         return(predictions)
 }
 
 ## * Misclassification rate
-.get_error <- function(predictions, targets, backend="R") {
+.get_error <- function(predictions, targets, backend='R') {
 
     switch(backend,
            R={
                mis_rate <- 1 - mean(rowSums(predictions * targets))
            },
            C={
-               stop(paste(backend," not implemented"))
+               stop(paste(backend,' not implemented'))
            },
            CUDA={
-               stop(paste(backend," not implemented"))
+               stop(paste(backend,' not implemented'))
            },
        {
-           stop("unrecognized computation backend")
+           stop('unrecognized computation backend')
        })
     return(mis_rate)
 }

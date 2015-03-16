@@ -163,6 +163,12 @@ test/fast:
 	@echo "devtools::test()" | $(R_COMMAND)
 test: veryclean reload document test/fast
 test/all: test test/custom
-
+## ** Checks
+check/docs: document
+	@echo "devtools::check_doc()" | $(R_COMMAND)
+check/examples: document
+	@echo "devtools::run_examples()" | $(R_COMMAND)
+check:
+	@echo "devtools::check(check_dir='./checks/')" | $(R_COMMAND)
 ## ** Misc config
 .PHONY: all clean rebuild test test/all diagnostic

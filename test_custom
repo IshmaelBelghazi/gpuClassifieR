@@ -24,7 +24,7 @@ targets_oos <- mini_mnist$test$labels
 weights_init <- matrix(rnorm(NCOL(feats) * NCOL(targets)), NCOL(feats),
                        NCOL(targets))
 ## ** Building model
-model <- LogReg(weights_init=weights_init)
+model <- Classifier(weights_init=weights_init)
 
 ## * Training model
 ## ** Setting training variables

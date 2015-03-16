@@ -3,30 +3,33 @@
 \name{get_error}
 \alias{get_error}
 \alias{get_error.model.spec}
-\title{Get model misclassification rate generic}
+\title{Computes model misclassification rate}
 \usage{
 get_error(object, feats, targets, backend = "R")
 
 \method{get_error}{model.spec}(object, feats, targets, backend = "R")
 }
 \arguments{
-\item{object}{Object of class model.spec}
+\item{object}{Linear classifier specification object.}
 
-\item{feats}{features to predict}
+\item{feats}{Numeric matrix. Features to predict. Dimensionality should be consistent with
+that of the model.}
 
-\item{targets}{Real targets}
+\item{targets}{Numeric matrix. TRUE targets to compare prediction against. Dimensionality
+should be consistent with that of the model. Should always be one-hot encoded.}
 
-\item{backend}{Computation backend ("R", "C", or "CUDA")}
+\item{backend}{Computation back-end ('R', 'C', or 'CUDA')}
 }
 \value{
-Misclassification rate
+Numeric scalar. Misclassification rate. Percentage of wrong predictions.
 }
 \description{
-Get model misclassification rate generic
+Computes model misclassification rate
 }
 \section{Methods (by class)}{
 \itemize{
-\item \code{model.spec}: Get model miscclassification rate
+\item \code{model.spec}: Computes model misclassification rate for linear
+classifier model object
 }}
 \author{
 Mohamed Ishmael Diwan Belghazi

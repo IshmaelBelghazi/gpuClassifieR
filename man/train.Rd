@@ -3,7 +3,7 @@
 \name{train}
 \alias{train}
 \alias{train.model.spec}
-\title{Gradient Descent trainer generic}
+\title{Gradient Descent trainer}
 \usage{
 train(object, feats, targets, decay = NULL, step_size = NULL,
   max_iter = NULL, verbose = FALSE, tol = 1e-06, backend = "R", ...)
@@ -13,36 +13,72 @@ train(object, feats, targets, decay = NULL, step_size = NULL,
   backend = "R", ...)
 }
 \arguments{
-\item{object}{model.spec object}
+\item{object}{Linear classifier specification object.}
 
-\item{feats}{features (N X M)}
+\item{feats}{Numeric Matrix of features. Follows the usual convention of having
+one example per row. For a model with M features and dataset with N
+examples the matrix should be N \eqn{\times} K}
 
-\item{targets}{targets (N X K)}
+\item{targets}{Numeric matrix of one hot encoded target. Follows the usual
+convention of having one target per row. For a model with K classes and a
+dataset with N examples the matrix should be N \eqn{\times} K}
 
-\item{decay}{L2 regularisation coefficient}
+\item{decay}{Numeric scalar. Tikhonov regularization coefficient (weight decay). Should be
+a non-negative real number.}
 
-\item{step_size}{gradient descent step size}
+\item{step_size}{Numeric scalar. Initial, gradient descent step size. If
+the current cost is worst that the previous, model parameters will not be
+update and the step_size will be divided by 2. If the current cost not
+the worse than the previous, parameters will be updated and the step_size
+will be multiplied by 1.1 .}
 
-\item{max_iter}{Maximum iteration}
+\item{max_iter}{Numeric Scalar. Maximum number of iterations allowed. Inf
+will keep the training going until the number of the current gradient
+Frobenius norm is less than tol.}
 
-\item{verbose}{prints output}
+\item{verbose}{Logical scalar. If TRUE, iteration number, current cost and
+step_size will be printed to the standard output.}
 
-\item{tol}{assume convergence when norm of gradient is smaller than tol}
+\item{tol}{Numeric scalar. Assumes convergence when the gradient Frobenius
+norm is less than tol.}
 
-\item{backend}{Computation backend ("R", "C", or "CUDA")}
+\item{backend}{Computation back-end ('R', 'C', or 'CUDA')}
 
-\item{...}{any other passthrough parameters}
+\item{...}{other arguments passed to specific methods}
 }
 \value{
 model.spec object
 }
 \description{
-Gradient Descent trainer generic
+Gradient Descent trainer
 }
 \section{Methods (by class)}{
 \itemize{
-\item \code{model.spec}: Gradient descent trainer
+\item \code{model.spec}: Gradient Descent trainer for linear classifier specification model objects.
 }}
+\examples{
+# Train model on single example of MIST and a single iteration
+# Generate random initial weights
+w_init <- matrix(rnorm(784 * 10), 784, 10)
+# construct model
+linear_classifier <- Classifier(weights_init=w_init)
+# Fetch training variables
+feats <- mini_mnist$train$images[1, , drop=FALSE]
+targets <- mini_mnist$train$labels[1, , drop=FALSE]
+# Specifying training parameters
+step_size <- 0.01
+decay <- 0.0001
+max_iter <- 1
+tol <- 1e-6
+verbose <- FALSE
+# Train model one a single example using the three back-ends
+linear_classifier_R <- train(linear_classifier, feats, targets, decay,
+step_size, max_iter, verbose, tol, backend='R')
+linear_classifier_C <- train(linear_classifier, feats, targets, decay,
+step_size, max_iter, verbose, tol, backend='C')
+linear_classifier_CUDA <- train(linear_classifier, feats, targets, decay,
+step_size, max_iter, verbose, tol, backend='CUDA')
+}
 \author{
 Mohamed Ishmael Diwan Belghazi
 }
