@@ -102,7 +102,7 @@ void _set_cost_logreg_cuda(cublasHandle_t handle,
   CUBLAS_CALL(cublasDasum(handle, K * N, dev_log_Y, 1, cost));
   // III.c adding regularization
   double W_ssq = 0;
-  cublasDdot_v2(handle, K * M, dev_W, 1, dev_W, 1, &W_ssq);
+  CUBLAS_CALL(cublasDdot(handle, K * M, dev_W, 1, dev_W, 1, &W_ssq));
   *cost += *decay * 0.5 * W_ssq;
 }
 
