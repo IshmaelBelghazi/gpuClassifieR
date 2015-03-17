@@ -1,5 +1,7 @@
-^.*\.Rproj$
-^.*\~$
 Makefile
 test_custom
-checks/
+^.*\.Rproj$
+^.*\~$
+^checks$
+^scripts$
+^\.travis\.yml$

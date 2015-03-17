@@ -1,0 +1,21 @@
+## Travis configuration file for gpuClassifieR
+
+language: r
+
+warnings_are_errors: false
+r_build_args: "--no-build-vignettes --no-manual"
+r_check_args: "--no-build-vignettes --no-manual --as-cran"
+
+r_github_packages:
+  - hadley/devtools
+
+before_install:
+  - export SCRIPTS=./scripts/travis
+
+install:
+  - sudo -E $SCRIPTS/travis_install.sh
+
+notifications:
+  email:
+    on_success: always
+    on_failure: always
