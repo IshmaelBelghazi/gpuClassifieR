@@ -23,9 +23,6 @@ targets_oos <- mini_mnist$test$labels
 ## ** initial weights
 weights_init <- matrix(rnorm(NCOL(feats) * NCOL(targets)), NCOL(feats),
                        NCOL(targets))
-## ** Building model
-model <- Classifier(weights_init=weights_init)
-
 ## * Training model
 ## ** Setting training variables
 max_iter <- 100
@@ -33,14 +30,17 @@ decay <- 0
 step_size <- 0.01
 verbose <- FALSE
 tol <- 1e-6
-backend <- "R"
-## ** Training model
-model <- train(model, feats, targets, decay=decay, step_size=step_size,
-               max_iter=max_iter,verbose=verbose, tol=tol, backend=backend)
-## ** printing model misclassification rates
-mis_is <- get_error(model, feats, targets, backend)
-mis_oos <- get_error(model, feats_oos, targets_oos, backend)
-print("model in sample misclassification rate")
-print(mis_is)
-print("model out of sample misclassification rate")
-print(mis_oos)
+
+## ** Training models and outputing misclassification rates
+for (backend in c("R", "C", "CUDA")) {
+    model <- Classifier(weights_init=weights_init)
+    model <- train(model, feats, targets, decay=decay, step_size=step_size,
+                   max_iter=max_iter, verbose=verbose,
+                   tol=tol, backend=backend)
+    mis_is <- get_error(model, feats, targets)
+    mis_oos <- get_error(model, feats_oos, targets_oos)
+    print(paste(backend, "backend in sample misclassification rate"))
+    print(mis_is)
+    print(paste(backend, "backend out of sample misclassification rate"))
+    print(mis_oos)
+}

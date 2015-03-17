@@ -25,41 +25,41 @@ R_COMMAND=R --no-save --slave
 ##,-----------------------------------
 ##| Defining R config Fetcher function
 ##`-----------------------------------
-RCONF=R --vanilla CMD config
-getconf=$(shell $(RCONF) $(1))
+R_CONF=R --vanilla CMD config
+R_getconf=$(shell $(R_CONF) $(1))
 ##,----------------------------
 ##| Getting pre-processor flags
 ##`----------------------------
-R_INCLUDE_FLAG=$(call getconf, --cppflags)
+R_INCLUDE_FLAG=$(call R_getconf, --cppflags)
 ##,---------------------
 ##| Getting Linker Flags
 ##`---------------------
-R_LDFLAGS=$(call getconf, --ldflags)
+R_LDFLAGS=$(call R_getconf, --ldflags)
 ##,-------------------------
 ##| Getting C compiler flags
 ##`-------------------------
-CC=$(call getconf, CC)
-CFLAGS=$(call getconf, CFLAGS)
-CPICFLAGS=$(call getconf, CPICFLAGS)
+CC=$(call R_getconf, CC)
+CFLAGS=$(call R_getconf, CFLAGS)
+CPICFLAGS=$(call R_getconf, CPICFLAGS)
 C_SYS_INCLUDE_PATH?=/usr/local/include
 
 ##,-----------------------
 ##| Getting C linker flags
 ##`-----------------------
-DYLIB_EXT=$(call getconf, DYLIB_EXT)
-DYLIB_LD=$(call getconf, DYLIB_LD)
-LDFLAGS=$(call getconf, LDFLAGS)
+DYLIB_EXT=$(call R_getconf, DYLIB_EXT)
+DYLIB_LD=$(call R_getconf, DYLIB_LD)
+LDFLAGS=$(call R_getconf, LDFLAGS)
 ##,-------------------------------
 ##| Getting C shared objects flags
 ##`-------------------------------
-SHLIB_EXT=$(call getconf, SHLIB_EXT)
-SHLIB_LD=$(call getconf, SHLIB_LD)
-SHLIB_LDFLAGS=$(call getconf, SHLIB_LDFLAGS)
-SHLIB_CFLAGS=$(call getconf, SHLIB_CFLAGS)
+SHLIB_EXT=$(call R_getconf, SHLIB_EXT)
+SHLIB_LD=$(call R_getconf, SHLIB_LD)
+SHLIB_LDFLAGS=$(call R_getconf, SHLIB_LDFLAGS)
+SHLIB_CFLAGS=$(call R_getconf, SHLIB_CFLAGS)
 ##,-------------------
 ##| Getting BLAS flags
 ##`-------------------
-BLAS_LIBS=$(call getconf, BLAS_LIBS)
+BLAS_LIBS=$(call R_getconf, BLAS_LIBS)
 
 # * Getting CUDA configuration variables
 
@@ -97,7 +97,7 @@ diagnostic:
 	@printf '%s\n' "## R config environement variables ##"
 	@printf '%s\n' "#####################################"
 	@printf '%s\n' "R configuration exec:"
-	@printf '%s\n' "$(RCONF)"
+	@printf '%s\n' "$(R_CONF)"
 	@printf '%s\n' "R shared lib helper script:"
 	@printf '%s\n' "$(RC)"
 	@printf '%s\n' "R C shared lib compilation preprocessor flags:"

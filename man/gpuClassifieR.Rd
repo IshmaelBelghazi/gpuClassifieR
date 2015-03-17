@@ -4,7 +4,7 @@
 \name{gpuClassifieR}
 \alias{gpuClassifieR}
 \alias{gpuClassifieR-package}
-\title{gpuClassieR: a GPU linear classfier for R}
+\title{gpuClassifieR: a GPU linear classifier for R}
 \description{
 This packages implements a linear classifier with a batch gradient descent trainer.
 Three backend are offered: R, C, and CUDA.
