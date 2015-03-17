@@ -13,6 +13,7 @@ before_install:
   - export SCRIPTS=./scripts/travis
 
 install:
+  - sudo chmod a+x $SCRIPTS/travis_install.sh
   - sudo -E $SCRIPTS/travis_install.sh
 
 notifications:

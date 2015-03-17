@@ -1,6 +1,6 @@
 #!/bin/bash
 # This script must be run with sudo.
-
+set -e
 ##########
 ## CUDA ##
 ##########

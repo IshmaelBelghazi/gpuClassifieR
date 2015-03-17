@@ -8,16 +8,20 @@ vignette: >
   %\VignetteEngine{knitr::rmarkdown}
   \usepackage[utf8]{inputenc}
 ---
+```{r, echo=FALSE, results="hide"}
+devtools::load_all(".")
+```
 # Introduction
 
 The gpuClassifierR package implements a multi-class L2 regularized logistic regression along with a batch gradient trainer. Both the model and the trainer have an R, C and CUDA implementation. Several choices were made to increase the efficiency of the package, for example:
 
-- Extensive use of BLAS and cuBLAS when reasonable.
+- Extensive use of BLAS and cuBLAS when appropriate.
 - Data in C was represented in a way to limit cache misses (Which is bound to happen considering the large scale problems this package aims to handle).
 - Routines were natively registered to minimize compiled code running time.
 - The .Call interface was preferred. Benchmarks show that it usually (albeit slightly) faster than .C.
 
 Moreover, to ensure the robustness of the package:
+
 - Unit tests were used to check the consistency of core functions amongst all implementations.
 - Special care has been taken with error handling in C and CUDA code.
 - Repeated use Valgrind and gpumemcheck to ensure the absence of memory leaks as well as extensive garbage collection tests.
@@ -29,6 +33,7 @@ Let us fit and asses gpuClassifierR performances using mini-MNIST.
 
 ## Loading data
 Let us first load and organize the dataset
+
 ```{r, results="hide"}
 data(mini_mnist)
 train_feats <- mini_mnist$train$images
@@ -39,8 +44,10 @@ M <- NCOL(train_feats)  ## Number of features
 K <- NCOL(train_targets)  ## Number of targets.
 ```
 ## Specifying models
+
 To fit the model we need to start by specifying one. To do so all it takes is a matrix of initial weights and calling the model constructor on it. Please note that the targets need to be in one hot encoding.
 Since we have three implementation let us specify three models but with the same initial weights.
+
 ```{r, results="hide"}
 w_init <- mat.or.vec(M, K)
 models <- list(R=w_init, C=w_init, CUDA=w_init)
@@ -58,7 +65,6 @@ verbose <- FALSE  ## TRUE to monitor the evoluation of the step size, cost and
 ## iterations
 tol <- 1e-6  ## The training will consider to have converged if the Frobenius
 ## norm of the gradient is less than tol
-
 ```
 ## Training the models
 Let us now train the three models
@@ -71,19 +77,27 @@ models <- mapply(function(X, Y) train(X, train_feats,
 ```
 ## Checking gradient for convergence
 Now that the models are trained let's ensure that convergence was indeed attained.
+
 ```{r grad, echo=FALSE}
-knitr::kable(as.data.frame(lapply(models, function(X) norm(X$final_grad, "F"))))
+knitr::kable(as.data.frame(lapply(models, function(X) norm(X$final_grad, "F"))), caption="Gradients Euclidean Norm")
 ```
+
 ## Assessing models predictive performances
+
 Let us now get, both in-sample and out-of-sample, models misclassification rates.
+
 ### In sample misclassification rate
-```{r is, results=FALSE}
-knitr::kable(as.data.frame(lapply(X=models, function(X) get_error(X, train_feats, train_targets))))
+
+```{r is, echo=FALSE, results='asis'}
+knitr::kable(as.data.frame(lapply(X=models, function(X) get_error(X, train_feats, train_targets))), caption="In Sample Misclassification Rate")
 ```
+
 ### Out of sample misclassification rate
-```{r oos, echo=FALSE}
-knitr::kable(as.data.frame(lapply(models, function(X) get_error(X, test_feats, test_targets))))
+
+```{r oos, echo=FALSE, results='asis'}
+knitr::kable(as.data.frame(lapply(models, function(X) get_error(X, test_feats, test_targets))), caption="Out of sample Misclassification Rate")
 ```
+
 1000 examples, 7840 parameters, no regularization. Some over-training was to be expected! Still the model performance are pretty good.
 To give a reference point, the current state of the art on the complete MNIST database is held by a committee of 35 convolutional neural networks with an outstanding misclassification rate of 0.23%!
 
@@ -110,21 +124,24 @@ benchmark_fun <- function(n_sample, feats, targets) {
 ## Running the benchmark
 We combine the training and test sets to get 2000 points. We then time each training and repeatedly increment training examples count by 100 up to 2000.
 
-```{r, echo=FALSE, eval=FALSE}
+```{r benchplot, echo=FALSE, results="hide", fig.width=14, fig.height=8}
 feats <- rbind(train_feats, test_feats)
 targets <- rbind(train_targets, test_targets)
 
 ## Plotting
-sample_points <- c(1, seq(500, NROW(feats), 500))
+sample_points <- c(1, seq(100, NROW(feats), 100))
 times <- t(sapply(X=sample_points, function(X) benchmark_fun(X, feats, targets)))
 times <- cbind(stack(as.data.frame(times)), rep(sample_points, 3))
 colnames(times) <- c("time", "backend", "size")
 require(ggplot2)
 time_plot <- ggplot(times, aes(x=size, y=time, group=backend, colour=backend)) + geom_line() + geom_point()
-time_plot + xlab("sample size") + ylab("Elapsed time in seconds") + ggtitle("gpuClassifieR implementations benchmark")
-plot(time_plot)
+time_plot <- time_plot + xlab("sample size") + ylab("Elapsed time in seconds") + ggtitle("gpuClassifieR implementations benchmark")
+plot(time_plot)  
+
+
 ```
 The CUDA implementations can appear disappointing. However, the following points need to be taken into consideration:
+
 - The gpu used for the benchmark is really of the lower tier (geforce 730).
 - Since implementations consistency was paramount during the development, the current CUDA code is done with double precision(to stay consistent with the R and C versions). The performance ratio of double against single performance on nvidia gpus ranges from 1/32 for the geforce 700 series to 1/3 for the GTX Titan. The next improvement to gpuClassifieR will be the addition of a single precision mode.
 - There is a large overhead with transferring data to the gpu. This overhead becomes insignificant once the sample size is large enough. A 2000 examples dataset is simply too small to benefit from  gpgpu speedup.
