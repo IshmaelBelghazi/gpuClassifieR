@@ -1,4 +1,4 @@
-Package: gpuClassifier
+Package: gpuClassifieR
 Title: gpuClassifieR C/CUDA linear classifier for R
 Version: 0.1.3
 Authors@R: person("Mohamed Ishmael Belghazi", "Belghazi", , "ishmael.belghazi@gmail.com", role = c("aut", "cre"))
