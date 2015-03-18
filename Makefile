@@ -159,6 +159,7 @@ build/vignette:
 ## ** Tests
 test/custom:
 	@printf "%s\n" "Running test..."
+	@chmod +x ./test_custom
 	@./test_custom
 	@printf "%s\n" "... Test finished."
 test/fast:

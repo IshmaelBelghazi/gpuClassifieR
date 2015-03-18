@@ -9,7 +9,7 @@ vignette: >
   \usepackage[utf8]{inputenc}
 ---
 ```{r, echo=FALSE, results="hide", eval=FALSE}
-devtools::load_all(".")
+devtools::load_all(".", quiet=TRUE)
 ```
 # Introduction
 
@@ -79,7 +79,8 @@ models <- mapply(function(X, Y) train(X, train_feats,
 Now that the models are trained let's ensure that convergence was indeed attained.
 
 ```{r grad, echo=FALSE, eval=FALSE}
-knitr::kable(as.data.frame(lapply(models, function(X) norm(X$final_grad, "F"))), caption="Gradients Euclidean Norm")
+knitr::kable(as.data.frame(lapply(models, function(X) norm(X$final_grad, "F"))),
+             caption="Gradients Euclidean Norm", format = 'markdown')
 ```
 
 ## Assessing models predictive performances
@@ -89,13 +90,15 @@ Let us now get, both in-sample and out-of-sample, models misclassification rates
 ### In sample misclassification rate
 
 ```{r is, echo=FALSE, results='asis', eval=FALSE}
-knitr::kable(as.data.frame(lapply(X=models, function(X) get_error(X, train_feats, train_targets))), caption="In Sample Misclassification Rate")
+knitr::kable(as.data.frame(lapply(X=models, function(X) get_error(X, train_feats, train_targets))), caption="In Sample Misclassification Rate",
+             format = 'markdown')
 ```
 
 ### Out of sample misclassification rate
 
 ```{r oos, echo=FALSE, results='asis', eval=FALSE}
-knitr::kable(as.data.frame(lapply(models, function(X) get_error(X, test_feats, test_targets))), caption="Out of sample Misclassification Rate")
+knitr::kable(as.data.frame(lapply(models, function(X) get_error(X, test_feats, test_targets))), caption="Out of sample Misclassification Rate",
+             format = 'markdown')
 ```
 
 1000 examples, 7840 parameters, no regularization. Some over-training was to be expected! Still the model performance are pretty good.
@@ -136,10 +139,12 @@ colnames(times) <- c("time", "backend", "size")
 require(ggplot2)
 time_plot <- ggplot(times, aes(x=size, y=time, group=backend, colour=backend)) + geom_line() + geom_point()
 time_plot <- time_plot + xlab("sample size") + ylab("Elapsed time in seconds") + ggtitle("gpuClassifieR implementations benchmark")
-plot(time_plot)  
+plot(time_plot)
 
 
 ```
+
+
 The CUDA implementations can appear disappointing. However, the following points need to be taken into consideration:
 
 - The gpu used for the benchmark is really of the lower tier (geforce 730).

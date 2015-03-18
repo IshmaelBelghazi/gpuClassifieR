@@ -29,16 +29,12 @@
 
     switch(backend,
            "R"={
-               message("R backend")
                do.call(".train_gd_R", as.list(match.call())[-1])
            },
            "C"={
-               message("C backend")
                do.call(".train_gd_C", as.list(match.call())[-1])
-
            },
            "CUDA"={
-               message("CUDA backend")
                do.call(".train_gd_CUDA", as.list(match.call())[-1])
            },
        {
