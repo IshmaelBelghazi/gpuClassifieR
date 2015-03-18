@@ -32,4 +32,4 @@ This package was build on ubuntu 14.10 with CUDA toolkit 6.5.
 
 * Vignette and test
 
-[[./misc/test.md][In the misc folder.]
+[[./misc/test.md][In the misc folder.]]
