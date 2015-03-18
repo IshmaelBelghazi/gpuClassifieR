@@ -8,7 +8,7 @@ vignette: >
   %\VignetteEngine{knitr::rmarkdown}
   \usepackage[utf8]{inputenc}
 ---
-```{r, echo=FALSE, results="hide", eval=FALSE}
+```{r, echo=FALSE, results="hide"}
 devtools::load_all(".")
 ```
 # Introduction
@@ -34,7 +34,7 @@ Let us fit and asses gpuClassifierR performances using mini-MNIST.
 ## Loading data
 Let us first load and organize the dataset
 
-```{r, results="hide", eval=FALSE}
+```{r, results="hide"}
 data(mini_mnist)
 train_feats <- mini_mnist$train$images
 train_targets <- mini_mnist$train$labels
@@ -48,7 +48,7 @@ K <- NCOL(train_targets)  ## Number of targets.
 To fit the model we need to start by specifying one. To do so all it takes is a matrix of initial weights and calling the model constructor on it. Please note that the targets need to be in one hot encoding.
 Since we have three implementation let us specify three models but with the same initial weights.
 
-```{r, results="hide", eval=FALSE}
+```{r, results="hide"}
 w_init <- mat.or.vec(M, K)
 models <- list(R=w_init, C=w_init, CUDA=w_init)
 models <- lapply(models, Classifier)
@@ -57,7 +57,7 @@ models <- lapply(models, Classifier)
 Once the model has been specified all it takes is calling the train method on it along with the training data.
 
 Let us start by laying out the model parameters
-```{r, results="hide", eval=FALSE}
+```{r, results="hide"}
 step_size <- 0.01  ## Initial step size
 decay <- 0.0  ## Tikhonov regularization coefficients
 max_iter <- 10000  ## Maximum number of iterations
@@ -68,7 +68,7 @@ tol <- 1e-6  ## The training will consider to have converged if the Frobenius
 ```
 ## Training the models
 Let us now train the three models
-```{r, results='hide', eval=FALSE}
+```{r, results='hide'}
 models <- mapply(function(X, Y) train(X, train_feats,
                                       train_targets, decay,
                                       step_size, max_iter,
@@ -78,7 +78,7 @@ models <- mapply(function(X, Y) train(X, train_feats,
 ## Checking gradient for convergence
 Now that the models are trained let's ensure that convergence was indeed attained.
 
-```{r grad, echo=FALSE, eval=FALSE}
+```{r grad, echo=FALSE}
 knitr::kable(as.data.frame(lapply(models, function(X) norm(X$final_grad, "F"))), caption="Gradients Euclidean Norm")
 ```
 
@@ -88,13 +88,13 @@ Let us now get, both in-sample and out-of-sample, models misclassification rates
 
 ### In sample misclassification rate
 
-```{r is, echo=FALSE, results='asis', eval=FALSE}
+```{r is, echo=FALSE, results='asis'}
 knitr::kable(as.data.frame(lapply(X=models, function(X) get_error(X, train_feats, train_targets))), caption="In Sample Misclassification Rate")
 ```
 
 ### Out of sample misclassification rate
 
-```{r oos, echo=FALSE, results='asis', eval=FALSE}
+```{r oos, echo=FALSE, results='asis'}
 knitr::kable(as.data.frame(lapply(models, function(X) get_error(X, test_feats, test_targets))), caption="Out of sample Misclassification Rate")
 ```
 
@@ -107,7 +107,7 @@ Let us now time the three implementation but for different varying dataset sizes
 ### Benchmark function
 We start by defining our benchmark functions. To stay consistent we fix the training iterations to 1000 and disregard convergence.
 
-```{r, results='hide', eval=FALSE}
+```{r, results='hide'}
 benchmark_fun <- function(n_sample, feats, targets) {
     w_init <- mat.or.vec(NCOL(feats), NCOL(targets))
     models <- lapply(list(R=w_init, C=w_init, CUDA=w_init), Classifier)
@@ -124,7 +124,7 @@ benchmark_fun <- function(n_sample, feats, targets) {
 ## Running the benchmark
 We combine the training and test sets to get 2000 points. We then time each training and repeatedly increment training examples count by 100 up to 2000.
 
-```{r benchplot, echo=FALSE, results="hide", fig.width=14, fig.height=8, eval=FALSE}
+```{r benchplot, echo=FALSE, results="hide", fig.width=14, fig.height=8}
 feats <- rbind(train_feats, test_feats)
 targets <- rbind(train_targets, test_targets)
 

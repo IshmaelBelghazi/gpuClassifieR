@@ -6,17 +6,21 @@ warnings_are_errors: false
 r_build_args: "--no-build-vignettes --no-manual"
 r_check_args: "--no-build-vignettes --no-manual --as-cran"
 
+r_packages:
+ - devtools
+ - testthat
+
 r_github_packages:
-  - hadley/devtools
+ - hadley/devtools
 
 before_install:
-  - export SCRIPTS=./scripts/travis
+ - export SCRIPTS=./scripts/travis
 
 install:
-  - sudo chmod a+x $SCRIPTS/travis_install.sh
-  - sudo -E $SCRIPTS/travis_install.sh
+ - sudo chmod a+x $SCRIPTS/travis_install.sh
+ - sudo -E $SCRIPTS/travis_install.sh
 
 notifications:
-  email:
-    on_success: always
-    on_failure: always
+ email:
+  on_success: always
+  on_failure: always
