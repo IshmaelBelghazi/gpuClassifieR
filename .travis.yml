@@ -20,6 +20,9 @@ install:
  - sudo chmod a+x $SCRIPTS/travis_install.sh
  - sudo -E $SCRIPTS/travis_install.sh
 
+after_failure:
+ - cat /home/travis/build/IshmaelBelghazi/gpuClassifieR/gpuClassifieR.Rcheck/00install.out
+
 notifications:
  email:
   on_success: always
