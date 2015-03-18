@@ -21,7 +21,7 @@ install:
  - sudo -E $SCRIPTS/travis_install.sh
 
 after_failure:
- - cat /home/travis/build/IshmaelBelghazi/gpuClassifieR/gpuClassifieR.Rcheck/00install.out
+ - sudo cat /home/travis/build/IshmaelBelghazi/gpuClassifieR/gpuClassifieR.Rcheck/00install.out
 
 notifications:
  email:
