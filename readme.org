@@ -6,7 +6,7 @@
 * Prerequisites
 
 1. A CUDA enabled gpu with compute capabilities 2.0 or above
-2. CUDA toolkit 5.5 or above (although it was only tested with 6.5)
+2. CUDA toolkit 5.5 or above (although the package was only tested with 6.5)
 
 * Installation Instructions
 
@@ -23,12 +23,12 @@
 + Installation: The package installs successfully using the
   devtools::install_github()
 + Check: The package fails R CMD check. This is seems to a common problem with
-  all package containing CUDA code and using nvcc. Even package currently on
-  CRAN (such as gputools and wideLM) do no pass the check. The package does
-  pass R CMD install --install=fake. If any one knows how to deal with this
+  all package containing CUDA code and using nvcc. Even packages currently on
+  CRAN (such as gputools and wideLM) do no pass the check. Still, the package does
+  pass R CMD install --install=fake. If any one knows how to deal with this,
   please contact me.
 
-This package was build on ubuntu 14.10 with CUDA toolkit 6.5.
+This package was built on ubuntu 14.10 x64 with CUDA toolkit 6.5.
 
 * Vignette and test
 
