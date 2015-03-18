@@ -12,3 +12,6 @@ rm -f $CUDA_FILE
 apt-get -y update
 apt-get -y install cuda-core-6-5 cuda-cublas-6-5 cuda-cublas-dev-6-5 cuda-cudart-6-5 cuda-cudart-dev-6-5 cuda-curand-6-5 cuda-curand-dev-6-5
 ln -s /usr/local/cuda-6.5 /usr/local/cuda
+
+## Installing devtools manually
+echo "install.packages('devtools', dependencies = TRUE, repos='http://cran.us.r-project.org')" | R --vanilla --no-save
