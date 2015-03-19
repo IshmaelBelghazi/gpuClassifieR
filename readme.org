@@ -25,8 +25,7 @@
 + Check: The package fails R CMD check. This is seems to a common problem with
   all package containing CUDA code and using nvcc. Even packages currently on
   CRAN (such as gputools and wideLM) do no pass the check. Still, the package does
-  pass R CMD install --install=fake. If any one knows how to deal with this,
-  please contact me.
+  pass R CMD install --install=fake. If you know how to deal with this, please let me know.
 
 This package was built on ubuntu 14.10 x64 with CUDA toolkit 6.5.
 
