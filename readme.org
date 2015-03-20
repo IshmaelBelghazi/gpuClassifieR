@@ -4,6 +4,7 @@
 
 * What's new
 + Added C-only branch. use install_github("IshmaelBelghazi/gpuClassifieR", ref="C_only")
++ Benchmark against glmnet. [[In misc/test.md][In misc/test.md]]
 * Prerequisites
 
 1. A CUDA enabled gpu with compute capabilities 2.0 or above
