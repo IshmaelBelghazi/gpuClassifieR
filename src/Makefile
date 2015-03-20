@@ -6,8 +6,8 @@
 ##| General Environement variables
 ##`-------------------------------
 
-OS := $(shell uname -s)
-ARCH := $(shell uname -m)
+OS=$(shell uname -s)
+ARCH=$(shell uname -m)
 
 ##,------------------------
 ##| R Environment variables
@@ -29,7 +29,7 @@ R_LIB?=-L$(R_HOME)/lib
 ##`-------------------------
 
 ## C files extension
-C_EXT:=.c
+C_EXT=.c
 ## C standard
 C_STD=-std=gnu99
 ## Shared library compilation flags
@@ -46,13 +46,13 @@ SHLIB_EXT=$(call R_getconf, SHLIB_EXT)
 ##`--------------------------
 
 ## Cuda file extension
-CUDA_EXT:=.cu
+CUDA_EXT=.cu
 ## Cuda home path
 CUDA_HOME?=/usr/local/cuda
 ## Cuda compiler path
 NVCC?=$(CUDA_HOME)/bin/nvcc
 ## Cuda Include path
-CUDA_INCLUDE?=(CUDA_HOME)/include
+CUDA_INCLUDE?=$(CUDA_HOME)/include
 ## Cuda library path
 ifeq ($(ARCH), i386)
 	CUDA_LIB?=$(CUDA_HOME)/lib
