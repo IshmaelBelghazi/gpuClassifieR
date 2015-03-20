@@ -25,7 +25,7 @@ weights_init <- matrix(rnorm(NCOL(feats) * NCOL(targets)), NCOL(feats),
                        NCOL(targets))
 ## * Training model
 ## ** Setting training variables
-max_iter <- 100
+max_iter <- Inf
 decay <- 0
 step_size <- 0.01
 verbose <- FALSE

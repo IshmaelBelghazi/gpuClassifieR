@@ -17,8 +17,9 @@
 1. Be sure to have a CUDA_HOME environment variable defined. Typically its
    value would be CUDA_HOME=/usr/local/cuda-M-m/. Where M and m refer to the
    Major and minor version number respectively.
-2. Use devtools::install_github("IshmaelBelghazi/gpuClassifieR")
-
+2. Add CUDA_HOME/lib64 to your LD_LIBRARY_PATH. i.e: Typically export
+   LD_LIBRARY_PATH=/usr/local/cuda-M-m/lib64 (or lib if on 32bit system)
+3. Use devtools::install_github("IshmaelBelghazi/gpuClassifieR")
 
 * Status
 
