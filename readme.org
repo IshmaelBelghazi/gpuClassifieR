@@ -1,6 +1,8 @@
 #+TITLE: gpuClassifieR - C/CUDA Linear Classifier for R
 #+AUTHOR: Mohamed Ishmael Diwan Belghazi
 #+EMAIL: ishmael.belghazi@ipsolcapital.com
++ CUDA and C: [[https://travis-ci.org/IshmaelBelghazi/gpuClassifieR][https://travis-ci.org/IshmaelBelghazi/gpuClassifieR.svg?branch=master]]
++ C_only: [[https://travis-ci.org/IshmaelBelghazi/gpuClassifieR][https://travis-ci.org/IshmaelBelghazi/gpuClassifieR.svg?branch=C_only]]
 
 * What's new
 + Added C-only branch. use install_github("IshmaelBelghazi/gpuClassifieR", ref="C_only")
