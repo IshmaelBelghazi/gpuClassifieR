@@ -9,18 +9,14 @@
     stopifnot(NROW(object$weights) == NCOL(feats))
     stopifnot(NCOL(object$weights) == NCOL(targets))
 
-    if(is.null(max_iter)) {
-        message("no maximum iteration specified. Running until convergence.")
-        max_iter <- Inf
+    if(is.null(max_iter) || is.infinite(max_iter)) {
+        message("no maximum iteration specified. Running to convergence.")
+        max_iter <- -1
     }
 
     if(is.null(step_size)) {
         message("unspecified step size. defaulting to 0.01")
         step_size <- 0.01
-    }
-    if(is.null(max_iter)) {
-        message("no maximum iteration specified. Running until convergence.")
-        max_iter <- Inf
     }
     if(is.null(decay)) {
         message("unspecified decay coeffecient. Setting it to zero")
@@ -53,8 +49,8 @@
 
     ## initializing training variables
     cost <- get_cost(object, feats, targets, decay, backend)
-    stop_condition <- FALSE
     iter <- 0
+    stop_condition <- (iter > max_iter && max_iter >=0)
     while(!stop_condition) {
         iter <- iter + 1
         if (verbose) message(sprintf("iteration: %d/%d", iter, max_iter))
@@ -71,7 +67,8 @@
             step_size <- 0.5 * step_size
             object$weights <- weights_old
         }
-        stop_condition <- (iter > max_iter) || (norm(grad, type="F") < tol)
+        stop_condition <- (iter > max_iter &&
+                               max_iter >= 0) || (norm(grad, type="F") < tol)
     }
 
     object$final_grad <- grad

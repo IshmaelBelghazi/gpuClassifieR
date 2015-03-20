@@ -82,7 +82,7 @@ SEXP train_gd_cuda(SEXP X, SEXP W, SEXP T, SEXP decay, SEXP step_size,
 
   double grad_norm = R_PosInf, cost_new = R_PosInf;
   *iter_ptr = 0;
-  int stop_condition = 0;
+  int stop_condition = (*iter_ptr > *max_iter_ptr) && (*max_iter_ptr >= 0);
   while (!stop_condition) {
     *iter_ptr += 1;
     if (*verbose_ptr) Rprintf("iteration: %d/%d\n", *iter_ptr, *max_iter_ptr);
@@ -112,7 +112,8 @@ SEXP train_gd_cuda(SEXP X, SEXP W, SEXP T, SEXP decay, SEXP step_size,
     }
     // checking gradient norm
     CUBLAS_CALL(cublasDnrm2_v2(handle, K * M, dev_grad_ptr, 1, &grad_norm));
-    stop_condition = (*iter_ptr > *max_iter_ptr) || (grad_norm < *tol_ptr);
+    stop_condition = (*iter_ptr > *max_iter_ptr &&
+                      *max_iter_ptr >=0) || (grad_norm < *tol_ptr);
   }
   // transfering to host
   CUBLAS_CALL(cublasGetMatrix(K, M, sizeof(double), dev_W_trained_ptr, K, W_trained_ptr, K));

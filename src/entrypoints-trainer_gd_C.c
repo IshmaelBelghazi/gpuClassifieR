@@ -37,6 +37,7 @@ SEXP train_gd_(SEXP X, SEXP W, SEXP T, SEXP decay, SEXP step_size,
   double * W_trained_ptr = REAL(W_trained);
   double * grad_ptr = REAL(grad);
   int * iter_ptr = INTEGER(iter);
+
   // Setting W_old to hold pending weights
   double * W_old_ptr = Calloc(K * M,  double);
   // copying W to W_trained
@@ -50,13 +51,12 @@ SEXP train_gd_(SEXP X, SEXP W, SEXP T, SEXP decay, SEXP step_size,
   // gettting initial cost
   double cost  = _get_cost_logreg(X_ptr, dim_X, W_trained_ptr,
                                   dim_W_trained, T_ptr, dim_T, decay_ptr);
-  double cost_new = R_PosInf;
 
   int one = 1, grad_len = K * M;
-  double alpha = 0.0, grad_norm = R_PosInf;
+  double alpha = 0.0, cost_new = R_PosInf, grad_norm = R_PosInf;
 
-  int stop_condition = 0;
   *iter_ptr = 0;
+  int stop_condition = (*iter_ptr > *max_iter_ptr) && (*max_iter_ptr >= 0);
   while (!stop_condition) {
     *iter_ptr += 1;
     if (*verbose_ptr) Rprintf("iteration: %d/%d\n", *iter_ptr, *max_iter_ptr);
@@ -81,7 +81,8 @@ SEXP train_gd_(SEXP X, SEXP W, SEXP T, SEXP decay, SEXP step_size,
       memcpy(W_trained_ptr, W_old_ptr, K * M * sizeof(double));
     }
     grad_norm = F77_CALL(dnrm2)(&grad_len, grad_ptr, &one);
-    stop_condition = (*iter_ptr > *max_iter_ptr) || (grad_norm < *tol_ptr);
+    stop_condition = (*iter_ptr > *max_iter_ptr &&
+                      *max_iter_ptr >=0) || (grad_norm < *tol_ptr);
   }
 
   Free(W_old_ptr);
