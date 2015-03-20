@@ -87,9 +87,10 @@ endif
 ##| Setting compiler
 ##`-----------------
 
-INCLUDES=-I. -I$(CUDA_INCLUDE) $(R_INCLUDE)
-PARAMS= $(DEVICEOPTS) -Xcompiler $(CPICFLAGS) --use_fast_math
-
+CUDA_INCLUDES=-I. -I$(CUDA_INCLUDE) $(R_INCLUDE)
+CUDA_PARAMS=$(DEVICEOPTS) -Xcompiler $(CPICFLAGS) --use_fast_math
+C_INCLUDES=-I. $(R_INCLUDE)
+C_PARAMS=-Xcompiler $(CPICFLAGS) -O3
 ##,---------------
 ##| Setting linker
 ##`---------------
@@ -121,10 +122,10 @@ $(TARGETS): $(CUDA_OBJS) $(C_OBJS)
 	$(NVCC) $(GPU_ARCH) -shared $(LD_PARAMS) $(LIBS) $(CUDA_OBJS) $(C_OBJS) -o $@
 
 $(CUDA_OBJS): %.o: %$(CUDA_EXT)
-	$(NVCC) $(GPU_ARCH) -c $(INCLUDES) $(PARAMS) $^ -o $@
+	$(NVCC) $(GPU_ARCH) -c $(CUDA_INCLUDES) $(CUDA_PARAMS) $^ -o $@
 
 $(C_OBJS): %.o: %$(C_EXT)
-	$(NVCC) --compiler-options $(C_STD) -c $(INCS) $(PARAMS) $^ -o $@
+	$(NVCC) --compiler-options $(C_STD) -c $(C_INCLUDES) $(C_PARAMS) $^ -o $@
 
 veryclean: clean
 	rm -rf *.so
