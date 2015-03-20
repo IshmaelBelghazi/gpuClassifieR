@@ -1,7 +1,12 @@
 ---
 title: "gpuClassifieR: a linear classifier written in C and CUDA for R"
 author: "Ishmael B."
-date: "2015-03-18"
+date: "2015-03-20"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{gpuClassifieR}
+  %\VignetteEngine{knitr::rmarkdown}
+  \usepackage[utf8]{inputenc}
 ---
 
 # Introduction
@@ -109,12 +114,12 @@ We start by defining our benchmark functions. To stay consistent we fix the trai
 
 
 ```r
-benchmark_fun <- function(n_sample, feats, targets) {
+benchmark_fun <- function(n_sample, feats, targets, decay=0.0, maxiter=1000) {
     w_init <- mat.or.vec(NCOL(feats), NCOL(targets))
     models <- lapply(list(R=w_init, C=w_init, CUDA=w_init), Classifier)
     time <- mapply(function(X, Y) system.time(train(X, feats[1:n_sample,, drop=FALSE],
                                                     targets[1:n_sample,, drop=FALSE],
-                                                    0.0, 0.01, 1000,
+                                                    decay, 0.01, maxiter,
                                                     FALSE, -1, Y))[['elapsed']]
                  , X=models, Y=names(models),
                    SIMPLIFY=FALSE)
@@ -123,12 +128,7 @@ benchmark_fun <- function(n_sample, feats, targets) {
 ```
 
 ## Running the benchmark
-We combine the training and test sets to get 2000 points. We then time each training and repeatedly increment training examples count by 100 up to 2000.
-
-
-```
-## Loading required package: ggplot2
-```
+We combine the training and test sets to get 2000 points. We then time each training and repeatedly increment training examples count by 100 up to 2000. We fix the number of iterations at 1000 and disregard gradient convergence.
 
 ![plot of chunk benchplot](figure/benchplot-1.png) 
 
@@ -138,3 +138,11 @@ The CUDA implementations can appear disappointing. However, the following points
 - The gpu used for the benchmark is really of the lower tier (geforce 730).
 - Since implementations consistency was paramount during the development, the current CUDA code is done with double precision(to stay consistent with the R and C versions). The performance ratio of double against single performance on nvidia gpus ranges from 1/32 for the geforce 700 series to 1/3 for the GTX Titan. The next improvement to gpuClassifieR will be the addition of a single precision mode.
 - There is a large overhead with transferring data to the gpu. This overhead becomes insignificant once the sample size is large enough. A 2000 examples dataset is simply too small to benefit from  gpgpu speedup.
+
+## Benchmark against glmnet
+Let's compare the performance of our C implementation against glmnet. We'll by timing how much times it takes for glmnet to get a grid of optimal decay coefficients. We will then time our code on the provided grid. We step the maximum number of iterations to 100 for both glmnet and our implementation.
+
+![plot of chunk compareplot](figure/compareplot-1.png) 
+
+
+glmnet computes the grid in 10.28 seconds. The C implementation of gpuClassifieR goes through the grid in 15.3 seconds. glmnet is 49% faster than the C implementation of gpuClassifieR. Keep in mind that this benchmark is not really rigorous, we are comparing two packages using two different training algorithms. Nevertheless, It is reasonable to expect that gpuClassifieR will get faster. There is still a lot of room for improvement.
