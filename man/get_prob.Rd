@@ -52,7 +52,6 @@ decay <- 0.01
 # compute log probabilities of the training set using the three back-ends
 log_prob_R <- get_prob(linear_classifier, feats, TRUE, TRUE, 'R')
 log_prob_C <- get_prob(linear_classifier, feats, TRUE, TRUE, 'C')
-log_prob_CUDA <- get_prob(linear_classifier, feats, TRUE, TRUE, 'CUDA')
 }
 \author{
 Mohamed Ishmael Diwan Belghazi

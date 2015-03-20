@@ -18,7 +18,7 @@ storage.mode(targets) <- "double"
 tol <- 1e-6
 decay <- runif(1, min=tol, max=1)
 ##----------------------------------------
-test_that("Conditional probabilties R/C/CUDA", {
+test_that("Conditional probabilties R/C", {
     normalize <- TRUE
     log_domain <- as.logical(rbinom(1, 1, 0.5))
 
@@ -26,31 +26,19 @@ test_that("Conditional probabilties R/C/CUDA", {
                  .get_condprob(feats, weights, normalize, log_domain, backend="C"),
                  tolerance=tol,
                  scale=1)
-    expect_equal(.get_condprob(feats, weights, normalize, log_domain, backend="R"),
-                 .get_condprob(feats, weights, normalize, log_domain, backend="CUDA"),
-                 tolerance=tol,
-                 scale=1)
 })
 
 ##---------------------------------------
-test_that("Cross-entropies R/C/CUDA", {
+test_that("Cross-entropies R/C", {
     expect_equal(.get_cost(feats, weights, targets, decay, backend="R"),
                  .get_cost(feats, weights, targets, decay, backend="C"),
                  tolerance=tol,
                  scale=1)
-    expect_equal(.get_cost(feats, weights, targets, decay, backend="R"),
-                 .get_cost(feats, weights, targets, decay, backend="CUDA"),
-                 tolerance=tol,
-                 scale=1)
 })
 ##---------------------------------------
-test_that("gradient R/C/CUDA", {
+test_that("gradient R/C", {
     expect_equal(.get_grad(feats, weights, targets, decay, backend="R"),
                  .get_grad(feats, weights, targets, decay, backend="C"),
-                 tolerance=tol,
-                 scale=1)
-    expect_equal(.get_grad(feats, weights, targets, decay, backend="R"),
-                 .get_grad(feats, weights, targets, decay, backend="CUDA"),
                  tolerance=tol,
                  scale=1)
 })

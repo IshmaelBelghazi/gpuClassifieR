@@ -31,7 +31,7 @@
                do.call(".train_gd_C", as.list(match.call())[-1])
            },
            "CUDA"={
-               do.call(".train_gd_CUDA", as.list(match.call())[-1])
+               stop("CUDA backend not usable in C only branch")
            },
        {
            stop("unrecognized computation backend")
@@ -85,26 +85,6 @@
     results <- .Call("train_gd_", as.matrix(feats),
                      t(as.matrix(weights)),  ## Transpose to minimize cache
                      t(as.matrix(targets)),  ## misuse during BLAS operations
-                     as.double(decay),
-                     as.double(step_size),
-                     as.integer(max_iter),
-                     as.logical(verbose),
-                     as.double(tol))
-
-    object$weights <- t(results$weights)
-    object$final_grad <- results$final_grad
-    object$final_iter <- results$final_iter
-    return(object)
-}
-
-## ** Gradient descent trainers: CUDA Backend
-##' @useDynLib gpuClassifieR, .registration=TRUE
-.train_gd_CUDA <-  function(object, feats, targets, decay=NULL, step_size=NULL,
-                            max_iter=NULL, verbose=FALSE, tol=1e-6, ...) {
-    weights <- coef(object)
-    results <- .Call("train_gd_cuda", as.matrix(feats),
-                     t(as.matrix(weights)),
-                     t(as.matrix(targets)),
                      as.double(decay),
                      as.double(step_size),
                      as.integer(max_iter),

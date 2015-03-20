@@ -38,7 +38,6 @@ coef.model.spec <- function(object, ...) object$weights
 ##' # compute gradient at the training set using the three back-ends
 ##' gradient_R <- get_grad(linear_classifier, feats, targets, decay, 'R')
 ##' gradient_C <- get_grad(linear_classifier, feats, targets, decay, 'C')
-##' gradient_CUDA <- get_grad(linear_classifier, feats, targets, decay, 'CUDA')
 get_grad <- function(object, feats, targets, decay=NULL, backend='R', ...){
 
     UseMethod('get_grad')
@@ -76,7 +75,6 @@ get_grad.model.spec <- function(object, feats, targets, decay=NULL, backend='R',
 ##' # compute cost of the training set using the three back-ends
 ##' cost_R <- get_cost(linear_classifier, feats, targets, decay, 'R')
 ##' cost_C <- get_cost(linear_classifier, feats, targets, decay, 'C')
-##' cost_CUDA <- get_cost(linear_classifier, feats, targets, decay, 'CUDA')
 get_cost <- function(object, feats, targets, decay=NULL, backend='R', ...){
     UseMethod('get_cost')
 }
@@ -119,7 +117,6 @@ get_cost.model.spec <- function(object, feats, targets,
 ##' # compute log probabilities of the training set using the three back-ends
 ##' log_prob_R <- get_prob(linear_classifier, feats, TRUE, TRUE, 'R')
 ##' log_prob_C <- get_prob(linear_classifier, feats, TRUE, TRUE, 'C')
-##' log_prob_CUDA <- get_prob(linear_classifier, feats, TRUE, TRUE, 'CUDA')
 get_prob <- function(object, feats, normalize=TRUE,
                      log_domain=FALSE, backend='R', ...) {
     UseMethod('get_prob')
@@ -218,8 +215,6 @@ get_error.model.spec <- function(object, feats, targets, backend='R') {
 ##' step_size, max_iter, verbose, tol, backend='R')
 ##' linear_classifier_C <- train(linear_classifier, feats, targets, decay,
 ##' step_size, max_iter, verbose, tol, backend='C')
-##' linear_classifier_CUDA <- train(linear_classifier, feats, targets, decay,
-##' step_size, max_iter, verbose, tol, backend='CUDA')
 train <- function(object, feats, targets, decay=NULL, step_size=NULL, max_iter=NULL,
                   verbose=FALSE, tol=1e-6, backend='R', ...) {
     UseMethod('train')

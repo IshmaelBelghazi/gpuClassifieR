@@ -32,7 +32,7 @@ verbose <- FALSE
 tol <- 1e-6
 
 ## ** Training models and outputing misclassification rates
-for (backend in c("R", "C", "CUDA")) {
+for (backend in c("R", "C")) {
     model <- Classifier(weights_init=weights_init)
     model <- train(model, feats, targets, decay=decay, step_size=step_size,
                    max_iter=max_iter, verbose=verbose,

@@ -76,8 +76,6 @@ linear_classifier_R <- train(linear_classifier, feats, targets, decay,
 step_size, max_iter, verbose, tol, backend='R')
 linear_classifier_C <- train(linear_classifier, feats, targets, decay,
 step_size, max_iter, verbose, tol, backend='C')
-linear_classifier_CUDA <- train(linear_classifier, feats, targets, decay,
-step_size, max_iter, verbose, tol, backend='CUDA')
 }
 \author{
 Mohamed Ishmael Diwan Belghazi

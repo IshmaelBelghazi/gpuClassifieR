@@ -21,11 +21,7 @@
                                    as.logical(log_domain)))
            },
            CUDA={
-               condprob <- t(.Call('get_condprob_logreg_cuda',
-                                   as.matrix(feats),
-                                   t(weights),
-                                   as.logical(normalize),
-                                   as.logical(log_domain)))
+               stop("CUDA backend not usable in C only branch")
            },
        {
            stop('unrecognized computation bckend')
@@ -50,10 +46,7 @@
                              as.double(decay))
            },
            CUDA={
-               cost <- .Call('get_cost_logreg_cuda', as.matrix(feats),
-                             t(as.matrix(weights)),
-                             t(as.matrix(targets)),
-                             as.double(decay))
+               stop("CUDA backend not usable in C only branch")
            },
        {
            stop('unrecognized computation backend')
@@ -79,11 +72,7 @@
                                as.double(decay)))
            },
            CUDA={
-               grad <- t(.Call('get_grad_logreg_cuda',
-                               as.matrix(feats),
-                               t(as.matrix(weights)),
-                               t(as.matrix(targets)),
-                               as.double(decay)))
+               stop("CUDA backend not usable in C only branch")
            },
        {
            stop('unrecognized computation backend')

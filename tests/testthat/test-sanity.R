@@ -43,19 +43,6 @@ test_that("Conditional probability C backend sanity checks", {
                  scale=1)
 })
 ## ---------------------------------------------------------------
-test_that("Conditional probability CUDA backend sanity checks", {
-    expect_true(all(.get_condprob(feats, weights, backend="CUDA") >= -tol))
-    expect_equal(rowSums(.get_condprob(feats, weights,
-                                             backend="CUDA")), rep(1.0, N),
-                 tolerance=tol, scale=1)
-    expect_equal(.get_condprob(feats_zero, weights_zero,
-                                     backend="CUDA"),
-                 matrix(rep(1/K, N * K), nrow=N),
-                 tolerance=tol,
-                 scale=1)
-})
-
-## ---------------------------------------------------------------
 test_that("Cost function R backend sanity checks", {
     expect_true(.get_cost(feats, weights, targets,
                                 decay, backend="R") >= 0, TRUE)
@@ -69,14 +56,6 @@ test_that("Cost function C backend sanity checks", {
                                 decay, backend="C") >= 0, TRUE)
     expect_equal(.get_cost(feats, weights, targets,
                                  decay, backend="C"), cost,
-                 tolerance=tol, scale=1)
-})
-## ----------------------------------------------------------------
-test_that("Cost function CUDA backend sanity checks", {
-    expect_true(.get_cost(feats, weights, targets,
-                                decay, backend="CUDA") >= 0, TRUE)
-    expect_equal(.get_cost(feats, weights, targets,
-                                 decay, backend="CUDA"), cost,
                  tolerance=tol, scale=1)
 })
 ## -----------------------------------------------------------------
@@ -98,17 +77,6 @@ test_that("Gradient function C backend sanity checks", {
                  scale=1)
     expect_equal(.get_grad(feats, weights, targets,
                                  decay, backend="C"), grad,
-                 tolerance=tol,
-                 scale=1)
-})
-## ---------------------------------------------------------------------
-test_that("Gradient function CUDA backend sanity checks", {
-    expect_equal(.get_grad(feats_zero, weights, targets,
-                                 decay, backend="CUDA"), mat.or.vec(M, K),
-                 tolerance=tol,
-                 scale=1)
-    expect_equal(.get_grad(feats, weights, targets,
-                                 decay, backend="CUDA"), grad,
                  tolerance=tol,
                  scale=1)
 })

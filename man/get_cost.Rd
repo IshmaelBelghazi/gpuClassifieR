@@ -52,7 +52,6 @@ decay <- 0.01
 # compute cost of the training set using the three back-ends
 cost_R <- get_cost(linear_classifier, feats, targets, decay, 'R')
 cost_C <- get_cost(linear_classifier, feats, targets, decay, 'C')
-cost_CUDA <- get_cost(linear_classifier, feats, targets, decay, 'CUDA')
 }
 \author{
 Mohamed Ishmael Diwan Belghazi

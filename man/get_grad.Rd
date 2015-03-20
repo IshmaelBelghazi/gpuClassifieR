@@ -54,7 +54,6 @@ decay <- 0.01
 # compute gradient at the training set using the three back-ends
 gradient_R <- get_grad(linear_classifier, feats, targets, decay, 'R')
 gradient_C <- get_grad(linear_classifier, feats, targets, decay, 'C')
-gradient_CUDA <- get_grad(linear_classifier, feats, targets, decay, 'CUDA')
 }
 \author{
 Mohamed Ishmael Diwan Belghazi
