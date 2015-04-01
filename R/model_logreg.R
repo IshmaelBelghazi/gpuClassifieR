@@ -43,7 +43,7 @@
                                          backend='R')
                cost <- -mean(log_prob * targets) + 0.5 * decay * sum(weights^2)
            },
-           'C'={
+           C={
                cost <- .Call('get_cost_logreg_', as.matrix(feats),
                              t(as.matrix(weights)),
                              t(as.matrix(targets)),
