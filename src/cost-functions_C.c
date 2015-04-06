@@ -8,7 +8,7 @@
 double _get_cross_entropy(const double * log_Y, const int * dim_log_Y,
                           const double * T, const int * dim_T) {
 
-  int N = dim_T[1],  K = dim_T[0];;
+  int N = dim_T[1],  K = dim_T[0];
   int one = 1;
   double cost = 0;
 
