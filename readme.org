@@ -36,4 +36,6 @@ This package was built on Ubuntu 14.10 x64 with CUDA toolkit 6.5.
 
 * Vignette and test
 
-[[./misc/test.md][In the misc folder.]]
++ [[./misc/test.md][In the misc folder.]]
+
++ [[./misc/benchmark_i5-750_vs_gtx-680.md][core i5-750 vs nvidia gtx-680]]

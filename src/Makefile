@@ -20,7 +20,7 @@ R_getconf=$(shell $(R_CONF) $(1))
 ## R_HOME
 R_HOME?=$(shell R RHOME)
 ## R include path
-R_INCLUDE?=-I$(R_HOME)/include
+R_INCLUDE?=$(shell R CMD config --cppflags)
 ## R library path
 R_LIB?=-L$(R_HOME)/lib
 
